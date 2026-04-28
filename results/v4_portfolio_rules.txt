@@ -1,0 +1,65 @@
+[2026-04-28 13:39:59.869136] Portfolio rule comparison on v4 environment
+  Ridge + 7y train + Weekly | 31 windows | cost 0.10%
+====================================================================================================
+Loaded 518 tickers
+
+
+[Top-10 equal] running...
+  CAGR +55.85% Sh 1.62 MDD -24.09% | vs SPY +43.19%p | win 26/31 | t=6.06 | held 10.0
+
+[Top-15 equal] running...
+  CAGR +48.03% Sh 1.63 MDD -22.30% | vs SPY +35.37%p | win 27/31 | t=6.47 | held 15.0
+
+[Top-20 equal (current)] running...
+  CAGR +43.67% Sh 1.63 MDD -20.97% | vs SPY +31.01%p | win 27/31 | t=6.65 | held 20.0
+
+[Top-30 equal] running...
+  CAGR +39.07% Sh 1.61 MDD -19.55% | vs SPY +26.42%p | win 28/31 | t=7.03 | held 30.0
+
+[Top-50 equal] running...
+  CAGR +33.12% Sh 1.56 MDD -18.28% | vs SPY +20.46%p | win 29/31 | t=7.47 | held 50.0
+
+[Linear + cut 1%] running...
+  CAGR +103.12% Sh 0.99 MDD -48.54% | vs SPY +90.46%p | win 21/31 | t=2.52 | held 1.1
+
+[Linear + cut 2%] running...
+  CAGR +104.59% Sh 0.98 MDD -48.91% | vs SPY +91.94%p | win 21/31 | t=2.54 | held 1.0
+
+[Linear + cut 3%] running...
+  CAGR +104.59% Sh 0.98 MDD -48.91% | vs SPY +91.94%p | win 21/31 | t=2.54 | held 1.0
+
+[Linear + cut 5%] running...
+  CAGR +104.59% Sh 0.98 MDD -48.91% | vs SPY +91.94%p | win 21/31 | t=2.54 | held 1.0
+
+[Softmax T=1 + cut 2%] running...
+  CAGR +113.78% Sh 1.19 MDD -41.83% | vs SPY +101.12%p | win 25/31 | t=2.86 | held 3.5
+
+[Softmax T=1 + cut 5%] running...
+  CAGR +111.32% Sh 1.02 MDD -46.98% | vs SPY +98.67%p | win 20/31 | t=2.63 | held 1.5
+
+[Softmax T=2 + cut 5%] running...
+  CAGR +107.64% Sh 1.07 MDD -45.44% | vs SPY +94.98%p | win 22/31 | t=2.65 | held 2.3
+
+[Softmax T=3 + cut 5%] running...
+  CAGR +102.46% Sh 1.02 MDD -46.34% | vs SPY +89.80%p | win 22/31 | t=2.51 | held 2.2
+
+========================================================================================================================
+## Summary (sorted by Sharpe)
+Config                           CAGR    Sh      MDD    vs SPY      Win      t   held
+------------------------------------------------------------------------------------------------------------------------
+Top-15 equal                  +48.03%  1.63  -22.30%   +35.37%p  27/31    6.47   15.0
+Top-20 equal (current)        +43.67%  1.63  -20.97%   +31.01%p  27/31    6.65   20.0
+Top-10 equal                  +55.85%  1.62  -24.09%   +43.19%p  26/31    6.06   10.0
+Top-30 equal                  +39.07%  1.61  -19.55%   +26.42%p  28/31    7.03   30.0
+Top-50 equal                  +33.12%  1.56  -18.28%   +20.46%p  29/31    7.47   50.0
+Softmax T=1 + cut 2%         +113.78%  1.19  -41.83%  +101.12%p  25/31    2.86    3.5
+Softmax T=2 + cut 5%         +107.64%  1.07  -45.44%   +94.98%p  22/31    2.65    2.3
+Softmax T=1 + cut 5%         +111.32%  1.02  -46.98%   +98.67%p  20/31    2.63    1.5
+Softmax T=3 + cut 5%         +102.46%  1.02  -46.34%   +89.80%p  22/31    2.51    2.2
+Linear + cut 1%              +103.12%  0.99  -48.54%   +90.46%p  21/31    2.52    1.1
+Linear + cut 2%              +104.59%  0.98  -48.91%   +91.94%p  21/31    2.54    1.0
+Linear + cut 3%              +104.59%  0.98  -48.91%   +91.94%p  21/31    2.54    1.0
+Linear + cut 5%              +104.59%  0.98  -48.91%   +91.94%p  21/31    2.54    1.0
+
+★ Best Sharpe: Top-15 equal
+  CAGR +48.03%, Sharpe 1.63, vs SPY +35.37%p, t=6.47, avg held 15.0 stocks

@@ -1,0 +1,46 @@
+[2026-04-28 14:26:15.667531] Bootstrap robustness on v4 best (Ridge + 7y + Weekly + Top-20)
+  N runs: 30 | Subset: 70% | Windows: 31
+====================================================================================================
+
+Full universe: 518 tickers
+Each bootstrap: keep 362 tickers
+  [Run  1] alpha +30.11%p, t= 7.63, win 29/31 (94%)
+  [Run  2] alpha +27.16%p, t= 6.21, win 28/31 (90%)
+  [Run  3] alpha +27.83%p, t= 7.04, win 27/31 (87%)
+  [Run  4] alpha +27.37%p, t= 7.09, win 27/31 (87%)
+  [Run  5] alpha +27.91%p, t= 7.54, win 27/31 (87%)
+  [Run  6] alpha +22.48%p, t= 6.27, win 27/31 (87%)
+  [Run  7] alpha +26.82%p, t= 6.00, win 27/31 (87%)
+  [Run  8] alpha +28.17%p, t= 6.14, win 28/31 (90%)
+  [Run  9] alpha +24.72%p, t= 5.68, win 27/31 (87%)
+  [Run 10] alpha +25.65%p, t= 6.30, win 27/31 (87%)
+  [Run 11] alpha +27.89%p, t= 7.19, win 28/31 (90%)
+  [Run 12] alpha +29.32%p, t= 6.63, win 26/31 (84%)
+  [Run 13] alpha +25.26%p, t= 7.73, win 28/31 (90%)
+  [Run 14] alpha +22.09%p, t= 7.05, win 28/31 (90%)
+  [Run 15] alpha +27.03%p, t= 5.99, win 27/31 (87%)
+  [Run 16] alpha +28.09%p, t= 6.42, win 28/31 (90%)
+  [Run 17] alpha +28.90%p, t= 6.16, win 28/31 (90%)
+  [Run 18] alpha +28.16%p, t= 7.67, win 29/31 (94%)
+  [Run 19] alpha +25.77%p, t= 6.33, win 29/31 (94%)
+  [Run 20] alpha +30.29%p, t= 7.15, win 28/31 (90%)
+  [Run 21] alpha +27.07%p, t= 6.11, win 27/31 (87%)
+  [Run 22] alpha +27.31%p, t= 6.52, win 29/31 (94%)
+  [Run 23] alpha +26.99%p, t= 7.31, win 29/31 (94%)
+  [Run 24] alpha +23.93%p, t= 7.30, win 29/31 (94%)
+  [Run 25] alpha +31.14%p, t= 6.28, win 27/31 (87%)
+  [Run 26] alpha +28.33%p, t= 7.24, win 28/31 (90%)
+  [Run 27] alpha +28.91%p, t= 6.43, win 28/31 (90%)
+  [Run 28] alpha +26.58%p, t= 6.40, win 27/31 (87%)
+  [Run 29] alpha +26.94%p, t= 7.60, win 29/31 (94%)
+  [Run 30] alpha +30.04%p, t= 6.85, win 28/31 (90%)
+
+====================================================================================================
+## Bootstrap aggregate (30 runs)
+  Mean alpha:     +27.28%p
+  Std of alphas:  2.09%p
+  Min:            +22.09%p
+  Max:            +31.14%p
+  P25 / P50 / P75: +26.58%p / +27.37%p / +28.33%p
+  Runs with t>2:  30/30 (100%)
+  Runs with α>0:  30/30 (100%)

@@ -1,37 +1,76 @@
 """
-Current portfolio recommendation — v4 (final tuning).
+Current portfolio recommendation — v4 (validated).
 
-Best config (validated):
-  - Universe: S&P 500 + ETF (518 tickers)
-  - Model: Ridge regression
-  - Train years: 7
-  - Forward days: 10
-  - Rebal: Weekly (rebal_days=5)
-  - Top-N: 20 equal weight
+Run weekly to get Top-N stocks for the week.
+
+Config (edit below):
+  - TOP_N: 10 / 15 / 20 (validated)
+  - SECTOR_CAP: None (no cap) or float (e.g. 0.25 = max 25% per sector)
+  - SEED_USD: your investment seed in USD
+
+Best validated config (S&P 500 + Ridge + 7y train + Weekly):
+  - Top-N=20 + No cap: vs SPY +31%p, Sharpe 1.63
+  - Top-N=20 + Cap 25%: vs SPY +31.4%p, Sharpe 1.68 (slightly better)
+  - Top-N=10 + No cap: vs SPY +43%p, Sharpe 1.62 (more aggressive)
 """
 import core
 import ml_model
-import factors
 import pandas as pd
 import numpy as np
 import os
+from collections import defaultdict
 from datetime import datetime
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 
+# =============================================================================
+# CONFIG — edit these for your operation
+# =============================================================================
+SEED_USD     = 400         # your seed in USD
+TOP_N        = 20          # 10 / 15 / 20 (validated)
+SECTOR_CAP   = None        # None (no cap) or 0.20 / 0.25 / 0.30 / 0.50 etc.
+TRAIN_YEARS  = 7           # 7 is sweet spot (validated)
+# =============================================================================
+
 DATA_DIR = '/home/dlfnek/stock_lab/data/master_sp500'
 OUTPUT_DIR = '/home/dlfnek/stock_lab/results'
-SEED_USD = 400
-TOP_N = 20
-TRAIN_YEARS = 7
+SECTORS_PATH = '/home/dlfnek/stock_lab/data/sectors.csv'
+
+
+def load_sectors():
+    if not os.path.exists(SECTORS_PATH):
+        return None
+    df = pd.read_csv(SECTORS_PATH, index_col='Ticker')
+    return df['Sector'].to_dict()
+
+
+def topn_with_sector_cap(score_series, sectors, top_n, sector_cap):
+    """Greedy: take highest scored, skip if sector cap violated."""
+    sorted_scores = score_series.dropna().sort_values(ascending=False)
+    held = []
+    sector_count = defaultdict(int)
+    if sector_cap is None:
+        return sorted_scores.head(top_n).index.tolist()
+    max_per_sector = max(1, int(top_n * sector_cap))
+    for ticker in sorted_scores.index:
+        if len(held) >= top_n:
+            break
+        sec = sectors.get(ticker, 'Unknown') if sectors else 'Unknown'
+        if sector_count[sec] >= max_per_sector:
+            continue
+        held.append(ticker)
+        sector_count[sec] += 1
+    return held
 
 
 def main():
-    print(f"[{datetime.now()}] ML Portfolio v4 (Ridge + 7y train + Weekly)")
-    print(f"  Seed: ${SEED_USD} | Top-N: {TOP_N} | Equal weight | Weekly")
+    cap_label = "No cap" if SECTOR_CAP is None else f"Cap {int(SECTOR_CAP*100)}%"
+    print(f"[{datetime.now()}] ML Portfolio v4 — Ridge + 7y + Weekly")
+    print(f"  Seed: ${SEED_USD} | Top-{TOP_N} | {cap_label}")
     print("=" * 80)
 
     close, vol = core.load_panel(master_dir=DATA_DIR)
+    sectors = load_sectors() if SECTOR_CAP else None
     hp = dict(ml_model.ML_HP_DEFAULT)
 
     latest_date = close.index.max()
@@ -44,11 +83,11 @@ def main():
     vol_sub = vol[valid_tickers]
 
     print(f"\nTrain: {train_start.date()} ~ {latest_date.date()} ({TRAIN_YEARS} years)")
-    print(f"Valid universe: {len(valid_tickers)} tickers\n")
+    print(f"Universe: {len(valid_tickers)} tickers\n")
 
+    # Train Ridge
     feat_panels = ml_model.build_features_panel(close_sub, vol_sub)
     target = ml_model.make_target(close_sub, hp['forward_days'], hp['target_type'])
-
     train_feats = {n: df[train_mask] for n, df in feat_panels.items()}
     train_target = target[train_mask]
     train_long = ml_model.stack_panel_to_long(train_feats, train_target)
@@ -57,45 +96,60 @@ def main():
     score_long = ml_model.stack_panel_to_long(score_feats)
 
     feat_cols = hp['feature_names']
-    X_train = train_long[feat_cols].values
-    y_train = train_long['target'].values
-    X_score = score_long[feat_cols].values
-
     print("Training Ridge regression...")
     scaler = StandardScaler()
-    X_train_s = scaler.fit_transform(X_train)
-    X_score_s = scaler.transform(X_score)
+    X_train_s = scaler.fit_transform(train_long[feat_cols].values)
     model = Ridge(alpha=1.0)
-    model.fit(X_train_s, y_train)
-    print(f"  Coefficients (per feature):")
+    model.fit(X_train_s, train_long['target'].values)
+    print(f"  Coefficients:")
     for f, c in zip(feat_cols, model.coef_):
         print(f"    {f:<12} {c:>+.4f}")
 
+    X_score_s = scaler.transform(score_long[feat_cols].values)
     preds = model.predict(X_score_s)
-    score_long_results = score_long.copy()
-    score_long_results['score'] = preds
-    score_long_results = score_long_results.sort_values('score', ascending=False).reset_index(drop=True)
+    score_long['score'] = preds
+    score_series = score_long.set_index('ticker')['score']
+
+    # Apply Top-N + sector cap
+    held_tickers = topn_with_sector_cap(score_series, sectors, TOP_N, SECTOR_CAP)
 
     latest_close = close_sub.loc[latest_date]
-    top = score_long_results.head(TOP_N).copy()
-    top['price'] = top['ticker'].map(latest_close)
     per_stock = SEED_USD / TOP_N
-    top['target_usd'] = per_stock
-    top['shares'] = top['target_usd'] / top['price']
 
+    rows = []
+    for i, ticker in enumerate(held_tickers, 1):
+        rows.append({
+            'rank': i,
+            'ticker': ticker,
+            'score': float(score_series[ticker]),
+            'price': float(latest_close[ticker]),
+            'sector': sectors.get(ticker, 'Unknown') if sectors else '-',
+            'target_usd': per_stock,
+            'shares': per_stock / float(latest_close[ticker]),
+        })
+    portfolio = pd.DataFrame(rows)
+
+    # Print
     print(f"\n{'='*80}")
-    print(f"★ Top-{TOP_N} Portfolio (v4 — Ridge, Equal weight, ${per_stock:.2f}/stock)")
+    print(f"★ Top-{TOP_N} Portfolio ({cap_label}, ${per_stock:.2f}/stock)")
     print(f"{'='*80}")
-    print(f"{'Rank':<5} {'Ticker':<8} {'Score':>8} {'Price':>10} {'Shares':>10} {'USD':>9}")
-    print("-" * 60)
-    for i, row in top.iterrows():
-        print(f"{i+1:<5} {row['ticker']:<8} {row['score']:>8.3f} "
-              f"${row['price']:>8.2f} {row['shares']:>10.6f} ${row['target_usd']:>7.2f}")
-    print("-" * 60)
-    print(f"{'Total':<24} {'':<10} {'':<10} ${top['target_usd'].sum():>8.2f}")
+    print(f"{'Rank':<5} {'Ticker':<8} {'Score':>7} {'Price':>10} {'Shares':>10} {'USD':>8} {'Sector':<22}")
+    print("-" * 90)
+    for _, r in portfolio.iterrows():
+        print(f"{r['rank']:<5} {r['ticker']:<8} {r['score']:>7.3f} "
+              f"${r['price']:>8.2f} {r['shares']:>10.6f} ${r['target_usd']:>6.2f} "
+              f"{r['sector']:<22}")
+    print("-" * 90)
+    print(f"{'Total':<24} {'':<10} {'':<10} ${portfolio['target_usd'].sum():>7.2f}")
+
+    if SECTOR_CAP and sectors:
+        print(f"\n## Sector breakdown (Cap {int(SECTOR_CAP*100)}%, max {max(1, int(TOP_N*SECTOR_CAP))}/sector)")
+        sec_count = portfolio['sector'].value_counts()
+        for sec, cnt in sec_count.items():
+            print(f"  {sec:<25} {cnt}")
 
     out_path = os.path.join(OUTPUT_DIR, 'current_portfolio.csv')
-    top[['ticker','score','price','target_usd','shares']].to_csv(out_path, index=False)
+    portfolio.to_csv(out_path, index=False)
     print(f"\n매수 리스트 CSV: {out_path}")
 
 

@@ -1,0 +1,38 @@
+[2026-04-28 15:10:40.463026] Sector concentration cap walk-forward
+  Top-20 | Ridge + 7y + Weekly | 31 windows
+====================================================================================================
+Loaded 518 tickers | 520 sector mappings
+
+
+[No cap (baseline)] (max 20/sector for Top-20) running...
+  CAGR +43.67% Sh 1.63 MDD -20.97% | vs SPY +31.01%p | win 27/31 | t=6.65
+
+[Sector cap 50%] (max 10/sector for Top-20) running...
+  CAGR +43.94% Sh 1.64 MDD -20.70% | vs SPY +31.29%p | win 27/31 | t=6.66
+
+[Sector cap 40%] (max 8/sector for Top-20) running...
+  CAGR +43.93% Sh 1.64 MDD -20.73% | vs SPY +31.27%p | win 27/31 | t=6.63
+
+[Sector cap 30%] (max 6/sector for Top-20) running...
+  CAGR +44.20% Sh 1.67 MDD -20.50% | vs SPY +31.55%p | win 27/31 | t=6.68
+
+[Sector cap 25%] (max 5/sector for Top-20) running...
+  CAGR +44.03% Sh 1.68 MDD -20.39% | vs SPY +31.37%p | win 27/31 | t=6.66
+
+[Sector cap 20%] (max 4/sector for Top-20) running...
+  CAGR +43.25% Sh 1.70 MDD -20.15% | vs SPY +30.59%p | win 28/31 | t=6.72
+
+[Sector cap 15%] (max 3/sector for Top-20) running...
+  CAGR +41.99% Sh 1.72 MDD -19.35% | vs SPY +29.33%p | win 27/31 | t=6.95
+
+====================================================================================================
+## Summary (sorted by Sharpe)
+Config                        CAGR    Sh      MDD    vs SPY      Win      t
+----------------------------------------------------------------------------------------------------
+Sector cap 15%             +41.99%  1.72  -19.35%   +29.33%p  27/31    6.95
+Sector cap 20%             +43.25%  1.70  -20.15%   +30.59%p  28/31    6.72
+Sector cap 25%             +44.03%  1.68  -20.39%   +31.37%p  27/31    6.66
+Sector cap 30%             +44.20%  1.67  -20.50%   +31.55%p  27/31    6.68
+Sector cap 40%             +43.93%  1.64  -20.73%   +31.27%p  27/31    6.63
+Sector cap 50%             +43.94%  1.64  -20.70%   +31.29%p  27/31    6.66
+No cap (baseline)          +43.67%  1.63  -20.97%   +31.01%p  27/31    6.65

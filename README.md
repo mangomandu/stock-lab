@@ -1,70 +1,95 @@
 # 자양동 Stock Lab
 
-S&P 500 universe + LightGBM/Ridge ML 기반 quant 투자 모델.
+S&P 500 universe + Ridge ML 기반 quant 투자 모델.
 
-## 검증 결과 (v4)
+## 검증된 알파 (v4, 2026-04-28)
 
-- **Walk-forward 31 windows (1995-2025)**
-- **Avg CAGR: +43.69%** (Sharpe 1.64)
-- **vs SPY alpha: +31.03%p** (t-stat 6.02, p < 0.0001)
-- 승률 28/31 (90%)
-
-자세한 내용: `reports/final_tuning_report.md`
-
-## 핵심 설정
-
-| 항목 | 값 |
+| 검증 | 결과 |
 |---|---|
-| Universe | S&P 500 + 17 ETF (518 tickers) |
-| Model | Ridge regression (또는 LightGBM) |
-| Features | momentum(12-1), lowvol, trend, rsi, ma, volsurge |
-| Train years | 7 |
-| Forward horizon | 10 days |
-| Rebalance | Weekly (5 trading days) |
-| Top-N | 20 (또는 5/10/30 옵션) |
-| Cost | 0.10% round-trip |
+| **Walk-forward** | 31 windows (1995-2025) |
+| **Avg CAGR** | +43.69% (Sharpe 1.63) |
+| **vs SPY alpha** | **+31.03%p** (t=6.65, p<0.0001) |
+| **승률** | 27/31 (87%) |
+| **Bootstrap** | 30 runs, mean alpha **+27.28%p** (12% 부풀림만) |
+| **진짜 알파 추정** (보수) | **+15~20%p** (sample bias + survivorship 차감) |
+
+자세한 보고서: `reports/final_tuning_report.md`
+
+## 핵심 설정 (v4 best)
+
+| 항목 | 값 | 검증 |
+|---|---|---|
+| Universe | S&P 500 + 17 ETF (518 tickers) | ✅ |
+| Model | **Ridge regression** | ✅ Ridge > LightGBM > XGBoost > MLP > RF |
+| Features | momentum (12-1), lowvol, trend, rsi, ma, volsurge | ✅ |
+| Train years | **7** | ✅ Sweet spot (3/5/7/10 비교) |
+| Forward horizon | 10 days | ✅ |
+| Rebalance | **Weekly** (5 trading days) | ✅ Best (Daily/Weekly/Biweekly/Monthly 비교) |
+| Top-N | **20** (10/15도 가능) | ✅ |
+| Sector cap | None (또는 25%) | ✅ Cap 25-30%이 약간 더 좋음 |
+| Cost | 0.10% round-trip | 검증 가정 |
+
+### Top-N × Sector Cap 옵션
+
+| Top-N | Cap | Sharpe | vs SPY | MDD | 특징 |
+|---|---|---|---|---|---|
+| 20 | None | 1.63 | +31.0%p | -21% | 안정 baseline |
+| **20** | **25%** | **1.68** | **+31.4%p** | -20% | **균형 best** |
+| 20 | 15% | 1.72 | +29.3%p | -19% | 최대 안정 |
+| 15 | None | 1.63 | +35.4%p | -22% | 균형 |
+| 10 | None | 1.62 | +43.2%p | -24% | 공격, 알파 max |
+| 10 | 15% | 1.74 | +36.1%p | -20% | 공격 + 분산 |
+
+→ `current_portfolio.py`에서 `TOP_N`, `SECTOR_CAP` 변수로 전환 가능.
 
 ## 폴더 구조
 
 ```
 stock_lab/
-├── core.py                  # 백테스트 엔진 (HP dict, build_holdings, stats)
-├── factors.py               # 학술 팩터 (momentum 12-1, low-vol, trend filter)
-├── ml_model.py              # LightGBM 파이프라인 (Ridge로 대체 가능)
-├── current_portfolio.py     # 매수 추천 (실시간 학습 + Top-N 출력)
-├── fetch_sp500_list.py      # Wikipedia에서 S&P 500 명단 가져오기
-├── download_sp500.py        # yfinance로 일봉 데이터 다운로드
-├── validate_sp500.py        # 데이터 검증 (IPO date, universe size 등)
+├── README.md
+├── core.py                     # 백테스트 엔진 (HP dict, build_holdings, stats)
+├── factors.py                  # 학술 팩터 (momentum 12-1, low-vol, trend, rsi, ma, volsurge)
+├── ml_model.py                 # LightGBM 파이프라인 (Ridge로도 사용)
+├── current_portfolio.py        # 매수 추천 (Ridge + 7y + Weekly + 설정 가능 Top-N/Cap)
+├── fetch_sp500_list.py         # Wikipedia에서 S&P 500 명단
+├── download_sp500.py           # yfinance로 일봉 데이터
+├── fetch_sectors.py            # 종목별 sector 정보
+├── validate_sp500.py           # 데이터 검증
 ├── requirements.txt
 │
 ├── data/
-│   ├── master_sp500/        # 종목별 일봉 CSV (518 종목)
-│   ├── sp500_tickers.txt    # 현재 S&P 500 명단
-│   ├── etf_tickers.txt      # ETF 명단
+│   ├── master_sp500/           # 종목별 일봉 CSV (518 종목, .gitignore)
+│   ├── sectors.csv             # 종목별 sector 매핑
+│   ├── sp500_tickers.txt
+│   ├── etf_tickers.txt
 │   └── all_sp500_tickers.txt
 │
-├── tests/                   # 검증 스크립트 (재실행 가능)
+├── tests/                      # 검증 스크립트
 │   ├── test_qqq_benchmark.py        # QQQ 실비교
 │   ├── test_cost_sensitivity.py     # 비용 민감도
-│   ├── test_train_window.py         # 7년이 sweet spot
-│   ├── test_forward_horizon.py      # 10d/Weekly 최적
-│   ├── test_hp_tuning.py            # LightGBM HP search
+│   ├── test_train_window.py         # 7년이 sweet spot 발견
+│   ├── test_forward_horizon.py      # Weekly + 10d forward 최적
+│   ├── test_hp_tuning.py            # LightGBM HP search (효과 미미)
 │   ├── test_model_compare.py        # Ridge > LightGBM 발견
-│   ├── test_ml_sp500.py             # 31 windows walk-forward
-│   ├── test_event_catalog.py        # 큰 이벤트 자동 식별
+│   ├── test_ml_sp500.py             # 31 windows walk-forward (메인)
+│   ├── test_event_catalog.py        # 30년 큰 이벤트 자동 식별
 │   ├── test_event_response.py       # 섹터 회복 패턴
-│   ├── test_event_rules.py          # Stop-loss 등 룰 검증
+│   ├── test_event_rules.py          # Stop-loss 등 룰 검증 (대부분 손해)
 │   ├── test_v4_portfolio_rules.py   # Top-N vs Score-weighted
-│   └── test_v4_bootstrap.py         # 30 runs robustness
+│   ├── test_v4_bootstrap.py         # 30 runs robustness
+│   ├── test_sector_cap.py           # Sector cap (25-30% sweet)
+│   ├── test_sector_cap_decompose.py # 시기별 cap 효과 분해
+│   └── test_topn_cap_cross.py       # Top-N × Cap 매트릭스
 │
-├── results/                 # 검증 결과 (.txt, .csv)
-│   ├── current_portfolio.csv        # 최신 매수 추천
-│   ├── ml_sp500_walkforward.csv     # 31 windows 결과
-│   └── archive/                     # 옛 결과들
+├── results/                    # 검증 결과
+│   ├── current_portfolio.csv         # 최신 매수 추천
+│   ├── ml_sp500_walkforward.csv      # 31 windows
+│   ├── topn_cap_cross.txt            # Cross 매트릭스
+│   └── archive/                      # 옛 결과
 │
 └── reports/
-    ├── final_tuning_report.md       # 최종 보고서 (v4)
-    └── archive/                     # 옛 보고서들
+    ├── final_tuning_report.md        # 최종 보고서 (v4)
+    └── archive/                      # 옛 보고서
 ```
 
 ## 사용법
@@ -72,9 +97,10 @@ stock_lab/
 ### 1. 데이터 다운로드 (한 번만)
 
 ```bash
-python3 fetch_sp500_list.py    # Wikipedia에서 명단
-python3 download_sp500.py      # yfinance로 일봉 (약 1-2분)
-python3 validate_sp500.py      # 검증
+python3 fetch_sp500_list.py     # Wikipedia에서 503 종목 + ETF
+python3 download_sp500.py       # yfinance로 일봉 (~1-2분)
+python3 fetch_sectors.py        # 종목별 sector
+python3 validate_sp500.py       # 검증
 ```
 
 ### 2. 매수 추천 받기
@@ -83,47 +109,79 @@ python3 validate_sp500.py      # 검증
 python3 current_portfolio.py
 ```
 
-출력: 최신 데이터로 학습한 Top-20 종목 + 매수 비중. CSV: `results/current_portfolio.csv`
+`current_portfolio.py` 상단의 config 변수 편집해서 운용 룰 선택
 
-### 3. 검증 재실행
+```python
+SEED_USD     = 400         # 시드 (USD)
+TOP_N        = 20          # 10 / 15 / 20
+SECTOR_CAP   = None        # None (no cap) or 0.20 / 0.25 / 0.30
+TRAIN_YEARS  = 7           # 7이 sweet spot
+```
+
+출력: 최신 데이터로 학습한 Top-N 종목 + 매수 비중. CSV: `results/current_portfolio.csv`
+
+### 3. 검증 재실행 (선택)
 
 ```bash
-python3 tests/test_ml_sp500.py        # 31 windows 알파 측정
-python3 tests/test_train_window.py    # train years 그리드
-python3 tests/test_v4_bootstrap.py    # robustness
+PYTHONPATH=. python3 tests/test_ml_sp500.py        # 31 windows 알파
+PYTHONPATH=. python3 tests/test_v4_bootstrap.py    # robustness
+PYTHONPATH=. python3 tests/test_topn_cap_cross.py  # Top-N × Cap 매트릭스
 ```
 
 ## 운용 룰
 
 ```
-주간 (매주 월요일):
-  1. python3 current_portfolio.py     # 새 Top-N 출력
-  2. 토스증권에서 차이 종목 매매 (소수점 매매)
+매주 월요일:
+  1. python3 current_portfolio.py        # 새 Top-N 출력 (Ridge 자동 재학습)
+  2. 이전 portfolio와 차이 종목만 매매 (토스증권 소수점)
 ```
 
 ## 검증된 사실
 
-- ✅ Universe 확장 (NASDAQ-100 → S&P 500): 알파 +8%p
-- ✅ 7년 train > 5년 (sweet spot)
-- ✅ Weekly > Biweekly > Daily
-- ✅ Ridge > LightGBM > XGBoost > MLP > Random Forest
-- ✅ Top-N: 작을수록 알파 ↑, MDD ↑ (변동 ↑)
-- ❌ Stop-loss: 손해 (회복기 놓침)
-- ❌ Vol filter / Drawdown halt: 손해
-- ❌ CASH 통합: 효과 미미
-- ⚠ Survivorship bias: ~35% 부풀림 추정 (Bootstrap)
+| 발견 | 효과 |
+|---|---|
+| ✅ Universe 확장 (NASDAQ-100 → S&P 500) | 알파 +8%p |
+| ✅ Train 7년 (vs 5년) | 알파 +7%p |
+| ✅ Weekly (vs Biweekly/Monthly) | 알파 +2%p |
+| ✅ Ridge (vs LightGBM/XGBoost) | 알파 +4%p |
+| ✅ Sector cap 25-30% | Sharpe ↑ 0.05, 알파 변화 없음 |
+| ❌ Stop-loss | 알파 -8%p (회복기 놓침) |
+| ❌ Vol filter / Drawdown halt | 알파 -2~3%p |
+| ❌ CASH 통합 | 효과 미미 |
+| ❌ HP tuning | 효과 미미 |
+| ⚠ Survivorship bias | ~12% 부풀림 (Bootstrap) |
 
 ## 알려진 한계
 
-- Survivorship bias 미해결 (현재 S&P 500만 보유 → API 가입 필요)
-- 비용 0.20% 이상이면 알파 사라짐 (한국 broker 직접 매매 어려움)
-- 미국 무수수료 broker 또는 토스증권 외화통장 필요
+- **Survivorship bias** 미해결 (S&P 500만 보유 → API 가입 시 가능)
+- **비용 0.20% 이상**이면 알파 사라짐 → 미국 무수수료 broker 또는 토스증권 (외화통장) 필수
+- **2024-2025 mega-cap 집중기** 알파 약함 (회복은 자연스러움)
 
 ## 다음 단계 후보
 
-- Bootstrap robustness check on v4 (진행 중)
-- Score-weighted portfolio rule (진행 중)
-- 새 features (다양한 momentum horizon, regime)
-- 앙상블 (Ridge + LightGBM)
+### Tier 1 — 즉시 가치 큼
+- 모멘텀 horizon 다양화 (1m, 3m, 6m, 12m)
+- 시장 regime feature (VIX level, SPY rolling stats)
+- Sector relative momentum
+- Ensemble (Ridge + LightGBM 평균)
+- Feature ablation (어느 feature가 진짜 알파인가)
+
+### Tier 2 — 큰 작업
+- OHLC 활용 (gap analysis, intraday vol)
+- Quality factor (ROE) — yfinance 부분 가능
+- Multi-horizon target (5+10+20일 평균)
+
+### Tier 3 — 사용자 개입 필요
 - Survivorship bias 해결 (Tiingo/Alpha Vantage API)
 - 한국 시장 추가 (pykrx)
+- 뉴스 sentiment (LLM)
+- Fundamentals (PER/ROE) 본격 — 유료 DB
+
+## 개발 일지
+
+| 버전 | 환경 | 알파 | t-stat |
+|---|---|---|---|
+| v1 | NASDAQ-100 + LightGBM 11 windows | +7.02%p (vs QQQ) | 1.68 |
+| v2 | + 21 windows 확장 | +10.16%p | 3.25 |
+| v3 | + S&P 500 universe | +18.63%p (vs SPY) | 5.69 |
+| **v4** | **+ Ridge + 7y + Weekly + Cap 옵션** | **+31.03%p** | **6.65** |
