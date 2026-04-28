@@ -121,9 +121,14 @@ def long_to_wide(score_long, all_dates, all_tickers):
     return wide
 
 
-def build_features_panel(close, vol):
-    """Compute the 6 feature panels (z-scored where applicable)."""
-    return factors.compute_zscored_factors(close, vol)
+def build_features_panel(close, vol, include_multi_horizon=False):
+    """Compute feature panels (z-scored where applicable).
+
+    Default: 6 features (momentum, lowvol, trend, rsi, ma, volsurge).
+    If include_multi_horizon: + momentum_1m, momentum_3m, momentum_6m (9 total).
+    """
+    return factors.compute_zscored_factors(
+        close, vol, include_multi_horizon=include_multi_horizon)
 
 
 def get_train_test_features(close, vol, train_mask, test_mask, hp):
@@ -131,8 +136,11 @@ def get_train_test_features(close, vol, train_mask, test_mask, hp):
 
     Train: features + target on train_mask dates.
     Test:  features only (no target needed) on test_mask dates.
+
+    If hp['include_multi_horizon'] is True, uses 9 features.
     """
-    feat_panels = build_features_panel(close, vol)
+    include_mh = hp.get('include_multi_horizon', False)
+    feat_panels = build_features_panel(close, vol, include_multi_horizon=include_mh)
     target = make_target(close, hp['forward_days'], hp['target_type'])
 
     # Restrict each to its mask

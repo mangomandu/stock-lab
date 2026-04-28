@@ -1,0 +1,38 @@
+[2026-04-28 17:12:45.427972] Multi-horizon momentum walk-forward
+  Top-20 | Ridge + 7y + Weekly | 31 windows
+====================================================================================================
+
+Loaded 518 tickers
+Baseline features: ['momentum', 'lowvol', 'trend', 'rsi', 'ma', 'volsurge']
+Multi-horizon features: ['momentum', 'lowvol', 'trend', 'rsi', 'ma', 'volsurge', 'momentum_1m', 'momentum_3m', 'momentum_6m']
+
+
+[Baseline (6 features)] running...
+  CAGR +43.67% Sh 1.63 MDD -20.97% | vs SPY +31.01%p | win 27/31 | t=6.65
+
+[+ Multi-horizon (9 features)] running...
+  CAGR +42.40% Sh 1.63 MDD -20.52% | vs SPY +29.75%p | win 27/31 | t=6.86
+
+====================================================================================================
+## Comparison
+Metric                      Baseline       + Multi-H       Diff
+------------------------------------------------------------
+CAGR                         +43.67%         +42.40%     -1.26%p
+Sharpe                          1.63            1.63      +0.00
+MDD                          -20.97%         -20.52%     +0.45%p
+vs SPY                       +31.01p         +29.75p     -1.26p
+t-stat                          6.65            6.86      +0.21
+Win rate             27/31            27/31           
+
+## Average Ridge coefficients (multi-horizon model, 31 windows)
+Feature           Avg Coef        Abs  Importance %
+-------------------------------------------------------
+momentum           +0.0061     0.0061        29.1%
+rsi                +0.0042     0.0042        20.3%
+lowvol             -0.0025     0.0025        12.1%
+volsurge           +0.0020     0.0020         9.4%
+ma                 -0.0018     0.0018         8.8%
+momentum_3m        -0.0017     0.0017         8.2%
+momentum_6m        -0.0014     0.0014         6.8%
+momentum_1m        -0.0011     0.0011         5.1%
+trend              +0.0000     0.0000         0.2%

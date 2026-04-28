@@ -1,0 +1,24 @@
+[2026-04-28 18:44:49.473927] 2-feature combinations
+====================================================================================================
+Loaded 518 tickers
+
+[lowvol+rsi+volsurge (3) baseline] ['lowvol', 'rsi', 'volsurge']
+  CAGR +46.82% Sh 1.77 MDD -20.93% | vs SPY +34.16%p | win 28/31 | t=6.63
+
+[lowvol+rsi (2)] ['lowvol', 'rsi']
+  CAGR +40.15% Sh 1.60 MDD -21.58% | vs SPY +27.50%p | win 27/31 | t=5.72
+
+[lowvol+volsurge (2)] ['lowvol', 'volsurge']
+  CAGR +43.76% Sh 1.65 MDD -20.58% | vs SPY +31.10%p | win 27/31 | t=5.30
+
+[rsi+volsurge (2)] ['rsi', 'volsurge']
+  CAGR +34.20% Sh 1.60 MDD -15.77% | vs SPY +21.54%p | win 22/31 | t=4.19
+
+====================================================================================================
+## Sorted by Sharpe
+Config                                #     CAGR    Sh      MDD    vs SPY      t
+--------------------------------------------------------------------------------
+lowvol+rsi+volsurge (3) baseline      3  +46.82%  1.77  -20.93%   +34.16%p   6.63
+lowvol+volsurge (2)                   2  +43.76%  1.65  -20.58%   +31.10%p   5.30
+lowvol+rsi (2)                        2  +40.15%  1.60  -21.58%   +27.50%p   5.72
+rsi+volsurge (2)                      2  +34.20%  1.60  -15.77%   +21.54%p   4.19

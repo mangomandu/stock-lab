@@ -42,6 +42,24 @@ def momentum_12_1(close, hp=None):
     return close.shift(skip_d) / close.shift(long_d) - 1
 
 
+def momentum_1m(close):
+    """Last 1-month return. Captures short-term catalyst (earnings, news).
+
+    May contain reversal noise — use as complement to 12-1, not replacement.
+    """
+    return close.pct_change(21)
+
+
+def momentum_3m(close):
+    """Last 3-month return. Captures earnings cycle and quarterly trend."""
+    return close.pct_change(63)
+
+
+def momentum_6m(close):
+    """Last 6-month return. Captures medium-term trend and recovery cycles."""
+    return close.pct_change(126)
+
+
 def low_volatility(close, hp=None):
     """Negative of 1-year daily return volatility.
 
@@ -108,11 +126,14 @@ def cross_sectional_zscore(factor_df):
 # -----------------------------------------------------------------------------
 # Compute all factors at once (returns dict of factor_name -> DataFrame)
 # -----------------------------------------------------------------------------
-def compute_all_factors(close, vol, hp=None):
-    """Compute all factors. Returns dict of name -> raw factor DataFrame."""
+def compute_all_factors(close, vol, hp=None, include_multi_horizon=False):
+    """Compute all factors. Returns dict of name -> raw factor DataFrame.
+
+    If include_multi_horizon, adds momentum_1m, momentum_3m, momentum_6m.
+    """
     if hp is None:
         hp = FACTOR_DEFAULTS
-    return {
+    factors = {
         'momentum':  momentum_12_1(close, hp),
         'lowvol':    low_volatility(close, hp),
         'trend':     trend_filter(close, hp),
@@ -120,14 +141,20 @@ def compute_all_factors(close, vol, hp=None):
         'ma':        ma20_above(close),
         'volsurge':  volume_surge(close, vol),
     }
+    if include_multi_horizon:
+        factors['momentum_1m'] = momentum_1m(close)
+        factors['momentum_3m'] = momentum_3m(close)
+        factors['momentum_6m'] = momentum_6m(close)
+    return factors
 
 
-def compute_zscored_factors(close, vol, hp=None):
+def compute_zscored_factors(close, vol, hp=None, include_multi_horizon=False):
     """Compute factors and z-score them cross-sectionally.
 
     Trend filter is binary so we don't z-score it (keep as 0/1).
+    If include_multi_horizon, also returns momentum_1m, _3m, _6m (z-scored).
     """
-    raw = compute_all_factors(close, vol, hp)
+    raw = compute_all_factors(close, vol, hp, include_multi_horizon=include_multi_horizon)
     z = {}
     for name, df in raw.items():
         if name == 'trend':

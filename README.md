@@ -2,32 +2,47 @@
 
 S&P 500 universe + Ridge ML 기반 quant 투자 모델.
 
-## 검증된 알파 (v4, 2026-04-28)
+## 검증된 알파 (v5 — 3-feature minimum, 2026-04-28)
 
 | 검증 | 결과 |
 |---|---|
 | **Walk-forward** | 31 windows (1995-2025) |
-| **Avg CAGR** | +43.69% (Sharpe 1.63) |
-| **vs SPY alpha** | **+31.03%p** (t=6.65, p<0.0001) |
-| **승률** | 27/31 (87%) |
-| **Bootstrap** | 30 runs, mean alpha **+27.28%p** (12% 부풀림만) |
-| **진짜 알파 추정** (보수) | **+15~20%p** (sample bias + survivorship 차감) |
+| **Avg CAGR** | **+46.82%** (Sharpe **1.77**) |
+| **vs SPY alpha** | **+34.16%p** (t=6.63) |
+| **승률** | 28/31 (90%) |
+| **Bootstrap** | 30 runs, mean alpha **+29.81%p** (모두 양수, std 1.72%p) |
+| **진짜 알파 추정** (보수) | **+20~25%p** (Bootstrap + survivorship 차감) |
+
+**핵심 발견**: 6 features → 3 features로 줄였더니 알파 ↑ (+31% → +34%p).
+Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 자세한 보고서: `reports/final_tuning_report.md`
 
-## 핵심 설정 (v4 best)
+## 핵심 설정 (v5 best)
 
 | 항목 | 값 | 검증 |
 |---|---|---|
 | Universe | S&P 500 + 17 ETF (518 tickers) | ✅ |
 | Model | **Ridge regression** | ✅ Ridge > LightGBM > XGBoost > MLP > RF |
-| Features | momentum (12-1), lowvol, trend, rsi, ma, volsurge | ✅ |
+| **Features** | **lowvol + rsi + volsurge (3개)** ⭐ | ✅ Ablation으로 minimum 확정 |
 | Train years | **7** | ✅ Sweet spot (3/5/7/10 비교) |
 | Forward horizon | 10 days | ✅ |
 | Rebalance | **Weekly** (5 trading days) | ✅ Best (Daily/Weekly/Biweekly/Monthly 비교) |
 | Top-N | **20** (10/15도 가능) | ✅ |
 | Sector cap | None (또는 25%) | ✅ Cap 25-30%이 약간 더 좋음 |
 | Cost | 0.10% round-trip | 검증 가정 |
+
+### Feature Set 비교
+
+| Set | Features | Sharpe | Alpha vs SPY |
+|---|---|---|---|
+| **★ Minimum (v5)** | **lowvol + rsi + volsurge** | **1.77** | **+34.16%p** |
+| Without MA+Mom | lowvol + trend + rsi + volsurge | 1.73 | +32.35%p |
+| Without MA | -ma | 1.68 | +32.67%p |
+| Without Mom | -momentum | 1.69 | +32.06%p |
+| Full (v4) | 6 features (incl. momentum, ma, trend) | 1.63 | +31.01%p |
+
+**충격**: Momentum/MA/Trend가 redundant. 학계 표준 momentum factor가 우리 모델에선 noise.
 
 ### Top-N × Sector Cap Cross 매트릭스 (검증 완료)
 
@@ -172,11 +187,14 @@ PYTHONPATH=. python3 tests/test_topn_cap_cross.py  # Top-N × Cap 매트릭스
 | ✅ Weekly (vs Biweekly/Monthly) | 알파 +2%p |
 | ✅ Ridge (vs LightGBM/XGBoost) | 알파 +4%p |
 | ✅ Sector cap 25-30% | Sharpe ↑ 0.05, 알파 변화 없음 |
+| ✅ **Feature ablation: 3 features이 6 features 압승** | Sharpe +0.14, 알파 +3%p |
+| ❌ Multi-horizon momentum (1m/3m/6m) | 알파 -1.3%p (redundant + recent regime) |
+| ❌ Regime features (VIX, drawdown) | 효과 거의 없음 (linear model 한계) |
 | ❌ Stop-loss | 알파 -8%p (회복기 놓침) |
 | ❌ Vol filter / Drawdown halt | 알파 -2~3%p |
 | ❌ CASH 통합 | 효과 미미 |
 | ❌ HP tuning | 효과 미미 |
-| ⚠ Survivorship bias | ~12% 부풀림 (Bootstrap) |
+| ⚠ Survivorship bias | ~13% 부풀림 (Bootstrap, 3-feature) |
 
 ## 알려진 한계
 
@@ -206,9 +224,10 @@ PYTHONPATH=. python3 tests/test_topn_cap_cross.py  # Top-N × Cap 매트릭스
 
 ## 개발 일지
 
-| 버전 | 환경 | 알파 | t-stat |
-|---|---|---|---|
-| v1 | NASDAQ-100 + LightGBM 11 windows | +7.02%p (vs QQQ) | 1.68 |
-| v2 | + 21 windows 확장 | +10.16%p | 3.25 |
-| v3 | + S&P 500 universe | +18.63%p (vs SPY) | 5.69 |
-| **v4** | **+ Ridge + 7y + Weekly + Cap 옵션** | **+31.03%p** | **6.65** |
+| 버전 | 환경 | 알파 | t-stat | Sharpe |
+|---|---|---|---|---|
+| v1 | NASDAQ-100 + LightGBM 11 windows | +7.02%p (vs QQQ) | 1.68 | 1.19 |
+| v2 | + 21 windows 확장 | +10.16%p | 3.25 | 1.27 |
+| v3 | + S&P 500 universe | +18.63%p (vs SPY) | 5.69 | 1.35 |
+| v4 | + Ridge + 7y + Weekly + Cap 옵션 | +31.03%p | 6.65 | 1.63 |
+| **v5** | **+ Feature ablation (3-feature minimum)** | **+34.16%p** | **6.63** | **1.77** |

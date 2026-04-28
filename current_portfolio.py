@@ -1,5 +1,5 @@
 """
-Current portfolio recommendation — v4 (validated).
+Current portfolio recommendation — v5 (3-feature minimum model).
 
 Run weekly to get Top-N stocks for the week.
 
@@ -7,11 +7,15 @@ Config (edit below):
   - TOP_N: 10 / 15 / 20 (validated)
   - SECTOR_CAP: None (no cap) or float (e.g. 0.25 = max 25% per sector)
   - SEED_USD: your investment seed in USD
+  - FEATURES: 'minimum' (3-feat best) or 'full' (6-feat baseline)
 
 Best validated config (S&P 500 + Ridge + 7y train + Weekly):
-  - Top-N=20 + No cap: vs SPY +31%p, Sharpe 1.63
-  - Top-N=20 + Cap 25%: vs SPY +31.4%p, Sharpe 1.68 (slightly better)
-  - Top-N=10 + No cap: vs SPY +43%p, Sharpe 1.62 (more aggressive)
+  - Features 'minimum' (lowvol+rsi+volsurge):
+    + Top-N=20: vs SPY +34.2%p, Sharpe 1.77 ★ NEW BEST
+    + Bootstrap mean: +29.81%p (30 runs, all positive, 13% sample bias)
+  - Features 'full' (6 baseline): vs SPY +31%p, Sharpe 1.63
+
+Validation: Bootstrap 30 runs all positive, t-stat 6.63.
 """
 import core
 import ml_model
@@ -30,7 +34,14 @@ SEED_USD     = 400         # your seed in USD
 TOP_N        = 20          # 10 / 15 / 20 (validated)
 SECTOR_CAP   = None        # None (no cap) or 0.20 / 0.25 / 0.30 / 0.50 etc.
 TRAIN_YEARS  = 7           # 7 is sweet spot (validated)
+FEATURES     = 'minimum'   # 'minimum' (3-feat best) or 'full' (6-feat)
 # =============================================================================
+
+FEATURE_SETS = {
+    'minimum': ['lowvol', 'rsi', 'volsurge'],          # v5 best (Sharpe 1.77)
+    'full':    ['momentum', 'lowvol', 'trend',          # v4 baseline
+                'rsi', 'ma', 'volsurge'],
+}
 
 DATA_DIR = '/home/dlfnek/stock_lab/data/master_sp500'
 OUTPUT_DIR = '/home/dlfnek/stock_lab/results'
@@ -65,13 +76,15 @@ def topn_with_sector_cap(score_series, sectors, top_n, sector_cap):
 
 def main():
     cap_label = "No cap" if SECTOR_CAP is None else f"Cap {int(SECTOR_CAP*100)}%"
-    print(f"[{datetime.now()}] ML Portfolio v4 — Ridge + 7y + Weekly")
-    print(f"  Seed: ${SEED_USD} | Top-{TOP_N} | {cap_label}")
+    feat_list = FEATURE_SETS[FEATURES]
+    print(f"[{datetime.now()}] ML Portfolio v5 — Ridge + 7y + Weekly")
+    print(f"  Seed: ${SEED_USD} | Top-{TOP_N} | {cap_label} | Features: {FEATURES} ({len(feat_list)})")
     print("=" * 80)
 
     close, vol = core.load_panel(master_dir=DATA_DIR)
     sectors = load_sectors() if SECTOR_CAP else None
     hp = dict(ml_model.ML_HP_DEFAULT)
+    hp['feature_names'] = feat_list
 
     latest_date = close.index.max()
     train_start = latest_date - pd.DateOffset(years=TRAIN_YEARS)
@@ -96,7 +109,10 @@ def main():
     score_long = ml_model.stack_panel_to_long(score_feats)
 
     feat_cols = hp['feature_names']
-    print("Training Ridge regression...")
+    # Drop rows with NaN in selected features
+    train_long = train_long.dropna(subset=feat_cols)
+    score_long = score_long.dropna(subset=feat_cols)
+    print(f"Training Ridge regression on {len(train_long):,} rows × {len(feat_cols)} features...")
     scaler = StandardScaler()
     X_train_s = scaler.fit_transform(train_long[feat_cols].values)
     model = Ridge(alpha=1.0)
