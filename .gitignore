@@ -1,5 +1,22 @@
-data/
+# Data files (too large for git, regenerable)
+data/master_sp500/
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
 *.log
+/tmp/
+
+# Editor
+.vscode/
+.idea/
+*.swp

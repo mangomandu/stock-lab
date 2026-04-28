@@ -1,0 +1,68 @@
+[2026-04-28 09:35:14.941523] Event-driven rebalancing walk-forward
+  Universe: NASDAQ-100 current snapshot (98 tickers)
+  Top-N: 20 equal weight | Cost: 0.10% RT
+====================================================================================================
+
+[Daily Top-20] running...
+  CAGR +23.84% | Sh 1.09 | MDD -18.78% | vs QQQ +6.14%p | win 14/21 | t=1.88 | reb/yr 84
+
+[Biweekly Top-20] running...
+  CAGR +26.22% | Sh 1.20 | MDD -17.66% | vs QQQ +8.53%p | win 17/21 | t=3.34 | reb/yr 23
+
+[Turnover ≥ 10%] running...
+  CAGR +23.75% | Sh 1.09 | MDD -18.76% | vs QQQ +6.05%p | win 15/21 | t=1.83 | reb/yr 84
+
+[Turnover ≥ 20%] running...
+  CAGR +24.31% | Sh 1.11 | MDD -18.69% | vs QQQ +6.62%p | win 13/21 | t=1.82 | reb/yr 82
+
+[Turnover ≥ 30%] running...
+  CAGR +23.76% | Sh 1.11 | MDD -18.53% | vs QQQ +6.07%p | win 15/21 | t=1.88 | reb/yr 71
+
+[Turnover ≥ 40%] running...
+  CAGR +23.68% | Sh 1.08 | MDD -18.70% | vs QQQ +5.98%p | win 15/21 | t=1.92 | reb/yr 55
+
+[Turnover ≥ 50%] running...
+  CAGR +25.38% | Sh 1.14 | MDD -18.45% | vs QQQ +7.68%p | win 16/21 | t=2.65 | reb/yr 38
+
+[Confidence ≥ 0.005] running...
+  CAGR +24.17% | Sh 1.11 | MDD -18.76% | vs QQQ +6.48%p | win 14/21 | t=2.34 | reb/yr 52
+
+[Confidence ≥ 0.010] running...
+  CAGR +25.09% | Sh 1.14 | MDD -18.50% | vs QQQ +7.39%p | win 16/21 | t=2.89 | reb/yr 42
+
+[Confidence ≥ 0.015] running...
+  CAGR +25.31% | Sh 1.18 | MDD -18.35% | vs QQQ +7.61%p | win 16/21 | t=3.16 | reb/yr 38
+
+[Confidence ≥ 0.020] running...
+  CAGR +24.48% | Sh 1.15 | MDD -18.84% | vs QQQ +6.78%p | win 17/21 | t=2.87 | reb/yr 31
+
+[Hybrid TO≥30 + C≥0.010] running...
+  CAGR +25.21% | Sh 1.16 | MDD -18.57% | vs QQQ +7.52%p | win 16/21 | t=2.97 | reb/yr 34
+
+[Hybrid TO≥20 + C≥0.005] running...
+  CAGR +24.70% | Sh 1.13 | MDD -18.74% | vs QQQ +7.00%p | win 14/21 | t=2.20 | reb/yr 51
+
+========================================================================================================================
+## Summary (sorted by Sharpe)
+Config                           CAGR    Sh     MDD    vs QQQ      Win      t  Rebal/yr
+------------------------------------------------------------------------------------------------------------------------
+Biweekly Top-20               +26.22%  1.20 -17.66%    +8.53%p  17/21    3.34       23
+Confidence ≥ 0.015            +25.31%  1.18 -18.35%    +7.61%p  16/21    3.16       38
+Hybrid TO≥30 + C≥0.010        +25.21%  1.16 -18.57%    +7.52%p  16/21    2.97       34
+Confidence ≥ 0.020            +24.48%  1.15 -18.84%    +6.78%p  17/21    2.87       31
+Confidence ≥ 0.010            +25.09%  1.14 -18.50%    +7.39%p  16/21    2.89       42
+Turnover ≥ 50%                +25.38%  1.14 -18.45%    +7.68%p  16/21    2.65       38
+Hybrid TO≥20 + C≥0.005        +24.70%  1.13 -18.74%    +7.00%p  14/21    2.20       51
+Confidence ≥ 0.005            +24.17%  1.11 -18.76%    +6.48%p  14/21    2.34       52
+Turnover ≥ 20%                +24.31%  1.11 -18.69%    +6.62%p  13/21    1.82       82
+Turnover ≥ 30%                +23.76%  1.11 -18.53%    +6.07%p  15/21    1.88       71
+Daily Top-20                  +23.84%  1.09 -18.78%    +6.14%p  14/21    1.88       84
+Turnover ≥ 10%                +23.75%  1.09 -18.76%    +6.05%p  15/21    1.83       84
+Turnover ≥ 40%                +23.68%  1.08 -18.70%    +5.98%p  15/21    1.92       55
+
+★ Best Sharpe: Biweekly Top-20
+  CAGR +26.22%, Sharpe 1.20, vs QQQ +8.53%p
+  Rebalances/year: 23 (vs daily ~252)
+
+★ Best vs QQQ: Biweekly Top-20
+  vs QQQ +8.53%p, Sharpe 1.20

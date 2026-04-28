@@ -1,0 +1,34 @@
+[2026-04-28 05:59:13.018926] LightGBM ML Model Walk-Forward (Biweekly Top-20)
+  Forward target: 10-day cross-sectional rank
+  Features: momentum, lowvol, trend, rsi, ma, volsurge
+====================================================================================================
+
+Universe: 98 tickers × 16187 dates
+
+  [2015] CAGR +26.93% Sh 1.32 MDD -13.71% | QQQ +9.44% | Excess +17.50%p | top: ['lowvol', 'momentum'] (1s)
+  [2016] CAGR +35.88% Sh 1.68 MDD -17.08% | QQQ +7.10% | Excess +28.78%p | top: ['momentum', 'ma'] (0s)
+  [2017] CAGR +33.01% Sh 2.08 MDD -6.65% | QQQ +32.81% | Excess +0.20%p | top: ['lowvol', 'momentum'] (0s)
+  [2018] CAGR  +0.85% Sh 0.16 MDD -25.38% | QQQ -0.13% | Excess +0.98%p | top: ['momentum', 'rsi'] (1s)
+  [2019] CAGR +54.68% Sh 2.30 MDD -9.94% | QQQ +38.96% | Excess +15.71%p | top: ['momentum', 'rsi'] (0s)
+  [2020] CAGR +68.29% Sh 1.47 MDD -39.48% | QQQ +48.17% | Excess +20.12%p | top: ['lowvol', 'momentum'] (0s)
+  [2021] CAGR +19.37% Sh 0.80 MDD -18.01% | QQQ +27.42% | Excess -8.05%p | top: ['lowvol', 'momentum'] (0s)
+  [2022] CAGR -18.43% Sh -0.41 MDD -26.96% | QQQ -32.68% | Excess +14.25%p | top: ['momentum', 'ma'] (0s)
+  [2023] CAGR +63.95% Sh 2.30 MDD -11.37% | QQQ +55.40% | Excess +8.55%p | top: ['lowvol', 'momentum'] (0s)
+  [2024] CAGR  +7.31% Sh 0.49 MDD -13.73% | QQQ +25.58% | Excess -18.27%p | top: ['momentum', 'ma'] (0s)
+  [2025] CAGR +18.39% Sh 0.84 MDD -23.34% | QQQ +20.96% | Excess -2.56%p | top: ['ma', 'momentum'] (0s)
+
+====================================================================================================
+## 11-window aggregate
+  Avg Test CAGR:   +28.20%
+  Avg Test Sharpe: 1.19
+  Avg Test MDD:    -18.70%
+  Avg vs QQQ:      +7.02%p
+  Win rate:        8/11 (73%)
+
+## Top-2 feature importance 출현 빈도 (11 windows)
+  momentum: 11회
+  lowvol: 5회
+  ma: 4회
+  rsi: 2회
+
+CSV: /home/dlfnek/stock_lab/results/ml_model_walkforward.csv

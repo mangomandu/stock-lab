@@ -1,0 +1,59 @@
+[2026-04-28 09:04:47.822888] Score-weighted portfolio walk-forward
+  Goal: replace Top-N with score-based weights + min-weight cutoff
+==============================================================================================================
+
+[Linear + cutoff 1%] running...
+  CAGR +26.29% | Sh 1.30 | MDD -16.75% | vs QQQ +8.59%p | win 16/21 | t=3.52 | avg held 55.5
+
+[Linear + cutoff 2%] running...
+  CAGR +38.60% | Sh 0.91 | MDD -29.53% | vs QQQ +20.90%p | win 13/21 | t=1.85 | avg held 5.9
+
+[Linear + cutoff 3%] running...
+  CAGR +57.58% | Sh 0.88 | MDD -34.96% | vs QQQ +39.88%p | win 14/21 | t=2.49 | avg held 2.4
+
+[Linear + cutoff 5%] running...
+  CAGR +54.32% | Sh 0.84 | MDD -37.81% | vs QQQ +36.62%p | win 13/21 | t=2.26 | avg held 1.8
+
+[Linear + cutoff 7%] running...
+  CAGR +53.27% | Sh 0.82 | MDD -38.09% | vs QQQ +35.57%p | win 13/21 | t=2.17 | avg held 1.7
+
+[Softmax T=1 + cut 2%] running...
+  CAGR +51.16% | Sh 1.10 | MDD -29.30% | vs QQQ +33.47%p | win 15/21 | t=3.02 | avg held 6.6
+
+[Softmax T=2 + cut 2%] running...
+  CAGR +55.45% | Sh 0.98 | MDD -32.67% | vs QQQ +37.75%p | win 11/21 | t=2.65 | avg held 4.6
+
+[Softmax T=3 + cut 2%] running...
+  CAGR +56.02% | Sh 0.93 | MDD -34.19% | vs QQQ +38.32%p | win 11/21 | t=2.56 | avg held 3.4
+
+[Softmax T=5 + cut 2%] running...
+  CAGR +53.90% | Sh 0.88 | MDD -35.79% | vs QQQ +36.20%p | win 12/21 | t=2.47 | avg held 2.7
+
+[Softmax T=2 + cut 5%] running...
+  CAGR +56.09% | Sh 0.95 | MDD -33.32% | vs QQQ +38.39%p | win 12/21 | t=2.55 | avg held 2.9
+
+[Softmax T=5 + cut 5%] running...
+  CAGR +53.11% | Sh 0.87 | MDD -36.04% | vs QQQ +35.41%p | win 11/21 | t=2.41 | avg held 2.2
+
+[Top-20 equal weight (baseline)] running...
+
+========================================================================================================================
+## Summary (sorted by t-stat)
+Config                             CAGR    Sh     MDD    vs QQQ      Win      t   avgN
+------------------------------------------------------------------------------------------------------------------------
+Linear + cutoff 1%              +26.29%  1.30 -16.75%    +8.59%p  16/21    3.52   55.5
+Top-20 equal (baseline)         +27.86%  1.27 -18.16%   +10.16%p  17/21    3.25   20.0
+Softmax T=1 + cut 2%            +51.16%  1.10 -29.30%   +33.47%p  15/21    3.02    6.6
+Softmax T=2 + cut 2%            +55.45%  0.98 -32.67%   +37.75%p  11/21    2.65    4.6
+Softmax T=3 + cut 2%            +56.02%  0.93 -34.19%   +38.32%p  11/21    2.56    3.4
+Softmax T=2 + cut 5%            +56.09%  0.95 -33.32%   +38.39%p  12/21    2.55    2.9
+Linear + cutoff 3%              +57.58%  0.88 -34.96%   +39.88%p  14/21    2.49    2.4
+Softmax T=5 + cut 2%            +53.90%  0.88 -35.79%   +36.20%p  12/21    2.47    2.7
+Softmax T=5 + cut 5%            +53.11%  0.87 -36.04%   +35.41%p  11/21    2.41    2.2
+Linear + cutoff 5%              +54.32%  0.84 -37.81%   +36.62%p  13/21    2.26    1.8
+Linear + cutoff 7%              +53.27%  0.82 -38.09%   +35.57%p  13/21    2.17    1.7
+Linear + cutoff 2%              +38.60%  0.91 -29.53%   +20.90%p  13/21    1.85    5.9
+
+★ Best: Linear + cutoff 1%
+  Avg held: 55.5 stocks (avg over time)
+  Excess: +8.59%p, t=3.52

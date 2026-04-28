@@ -1,0 +1,58 @@
+[2026-04-28 10:35:28.648118] ML walk-forward on S&P 500 universe
+  Top-20 biweekly, cost 0.10% RT
+==============================================================================================================
+  [1995] U=277 | CAGR  +74.80% Sh  3.19 MDD  -9.28% | vs QQQ  +0.00%p vs SPY +36.75%p | top: ['lowvol', 'ma']
+  [1996] U=289 | CAGR  +39.89% Sh  2.06 MDD -14.71% | vs QQQ  +0.00%p vs SPY +17.59%p | top: ['momentum', 'ma']
+  [1997] U=307 | CAGR  +52.65% Sh  2.26 MDD -11.73% | vs QQQ  +0.00%p vs SPY +19.33%p | top: ['lowvol', 'ma']
+  [1998] U=311 | CAGR  +75.61% Sh  2.29 MDD -25.33% | vs QQQ  +0.00%p vs SPY +46.91%p | top: ['momentum', 'ma']
+  [1999] U=326 | CAGR  +44.83% Sh  2.05 MDD  -8.34% | vs QQQ -58.95%p vs SPY +24.44%p | top: ['lowvol', 'ma']
+  [2000] U=345 | CAGR  +42.48% Sh  1.27 MDD -13.61% | vs QQQ +78.59%p vs SPY +52.22%p | top: ['lowvol', 'ma']
+  [2001] U=357 | CAGR   +8.10% Sh  0.43 MDD -31.42% | vs QQQ +41.88%p vs SPY +20.04%p | top: ['momentum', 'ma']
+  [2002] U=366 | CAGR  +41.25% Sh  1.45 MDD -17.80% | vs QQQ +78.61%p vs SPY +62.83%p | top: ['lowvol', 'ma']
+  [2003] U=379 | CAGR  +82.75% Sh  3.45 MDD  -8.20% | vs QQQ +33.08%p vs SPY +54.57%p | top: ['ma', 'lowvol']
+  [2004] U=386 | CAGR  +38.72% Sh  2.02 MDD  -8.32% | vs QQQ +28.18%p vs SPY +28.02%p | top: ['ma', 'lowvol']
+  [2005] U=387 | CAGR  +21.26% Sh  1.29 MDD -14.04% | vs QQQ +19.69%p vs SPY +16.43%p | top: ['ma', 'rsi']
+  [2006] U=398 | CAGR  +17.58% Sh  0.86 MDD -21.67% | vs QQQ +10.40%p vs SPY  +1.66%p | top: ['lowvol', 'ma']
+  [2007] U=407 | CAGR   +5.17% Sh  0.34 MDD -15.67% | vs QQQ -13.94%p vs SPY  +0.01%p | top: ['lowvol', 'momentum']
+  [2008] U=414 | CAGR  -38.19% Sh -0.78 MDD -54.20% | vs QQQ  +3.41%p vs SPY  -1.51%p | top: ['ma', 'momentum']
+  [2009] U=426 | CAGR  +39.77% Sh  1.36 MDD -26.13% | vs QQQ -14.92%p vs SPY +13.41%p | top: ['momentum', 'ma']
+  [2010] U=431 | CAGR  +40.18% Sh  1.59 MDD -16.14% | vs QQQ +20.04%p vs SPY +25.13%p | top: ['lowvol', 'ma']
+  [2011] U=435 | CAGR   +8.40% Sh  0.42 MDD -20.44% | vs QQQ  +4.92%p vs SPY  +6.50%p | top: ['ma', 'lowvol']
+  [2012] U=445 | CAGR  +19.15% Sh  1.10 MDD -11.81% | vs QQQ  +0.88%p vs SPY  +3.02%p | top: ['rsi', 'ma']
+  [2013] U=452 | CAGR  +30.63% Sh  2.00 MDD  -8.18% | vs QQQ  -6.00%p vs SPY  -1.68%p | top: ['ma', 'lowvol']
+  [2014] U=461 | CAGR  +17.33% Sh  0.93 MDD -16.07% | vs QQQ  -1.85%p vs SPY  +3.87%p | top: ['ma', 'lowvol']
+  [2015] U=469 | CAGR   +3.72% Sh  0.29 MDD -12.66% | vs QQQ  -5.72%p vs SPY  +2.48%p | top: ['ma', 'lowvol']
+  [2016] U=474 | CAGR  +25.98% Sh  1.28 MDD -16.63% | vs QQQ +18.89%p vs SPY +13.99%p | top: ['ma', 'momentum']
+  [2017] U=481 | CAGR  +38.71% Sh  2.29 MDD  -7.15% | vs QQQ  +5.90%p vs SPY +16.91%p | top: ['momentum', 'ma']
+  [2018] U=486 | CAGR   -2.94% Sh -0.01 MDD -26.92% | vs QQQ  -2.81%p vs SPY  +1.65%p | top: ['lowvol', 'ma']
+  [2019] U=489 | CAGR  +26.21% Sh  1.38 MDD -11.56% | vs QQQ -12.75%p vs SPY  -5.01%p | top: ['ma', 'momentum']
+  [2020] U=494 | CAGR  +63.41% Sh  1.15 MDD -48.92% | vs QQQ +15.24%p vs SPY +45.16%p | top: ['lowvol', 'ma']
+  [2021] U=501 | CAGR  +30.35% Sh  1.18 MDD -14.39% | vs QQQ  +2.93%p vs SPY  +1.62%p | top: ['ma', 'lowvol']
+  [2022] U=506 | CAGR   -6.41% Sh  0.04 MDD -28.93% | vs QQQ +26.27%p vs SPY +11.83%p | top: ['ma', 'lowvol']
+  [2023] U=510 | CAGR  +43.29% Sh  1.85 MDD -17.73% | vs QQQ -12.10%p vs SPY +16.88%p | top: ['ma', 'lowvol']
+  [2024] U=512 | CAGR  +46.23% Sh  1.82 MDD -13.57% | vs QQQ +20.65%p vs SPY +21.34%p | top: ['ma', 'lowvol']
+  [2025] U=514 | CAGR  +38.92% Sh  1.09 MDD -29.15% | vs QQQ +17.96%p vs SPY +21.05%p | top: ['ma', 'lowvol']
+
+==============================================================================================================
+## 31-window aggregate
+  Avg Test CAGR: +31.28%
+  Avg Test Sharpe: 1.35
+  Avg Test MDD: -18.73%
+
+## Statistical significance vs QQQ
+  Mean alpha: +11.06%p
+  Win rate: 18/27 (67%)
+  t-stat: 2.07
+
+## Statistical significance vs SPY
+  Mean alpha: +18.63%p
+  Win rate: 28/31 (90%)
+  t-stat: 5.69
+
+## Top-2 feature importance (31 windows)
+  ma: 30/31회 (97%)
+  lowvol: 21/31회 (68%)
+  momentum: 9/31회 (29%)
+  rsi: 2/31회 (6%)
+
+CSV: /home/dlfnek/stock_lab/results/ml_sp500_walkforward.csv

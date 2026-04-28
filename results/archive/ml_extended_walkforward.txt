@@ -1,0 +1,52 @@
+[2026-04-28 06:08:37.535095] Extended Walk-Forward: ML model
+  Test years: 2005 ~ 2025 (21 windows)
+  Train: 5y rolling | Test: 1y | Biweekly Top-20
+====================================================================================================
+  [2005] U= 66 | CAGR  +42.91% Sh  2.48 MDD  -8.05% | QQQ   +1.57% | Excess  +41.35%p | top: ['lowvol', 'momentum']
+  [2006] U= 68 | CAGR  +17.07% Sh  0.89 MDD -18.34% | QQQ   +7.17% | Excess   +9.90%p | top: ['lowvol', 'momentum']
+  [2007] U= 68 | CAGR   +8.16% Sh  0.51 MDD -15.01% | QQQ  +19.11% | Excess  -10.95%p | top: ['momentum', 'ma']
+  [2008] U= 71 | CAGR  -30.93% Sh -0.59 MDD -50.44% | QQQ  -41.60% | Excess  +10.67%p | top: ['lowvol', 'momentum']
+  [2009] U= 72 | CAGR  +80.33% Sh  2.44 MDD -13.73% | QQQ  +54.68% | Excess  +25.64%p | top: ['momentum', 'lowvol']
+  [2010] U= 75 | CAGR  +27.65% Sh  1.16 MDD -17.74% | QQQ  +20.14% | Excess   +7.51%p | top: ['lowvol', 'momentum']
+  [2011] U= 78 | CAGR   +4.11% Sh  0.28 MDD -26.42% | QQQ   +3.48% | Excess   +0.63%p | top: ['lowvol', 'momentum']
+  [2012] U= 78 | CAGR  +29.61% Sh  1.57 MDD -10.65% | QQQ  +18.27% | Excess  +11.34%p | top: ['momentum', 'rsi']
+  [2013] U= 82 | CAGR  +64.17% Sh  3.32 MDD  -4.60% | QQQ  +36.63% | Excess  +27.53%p | top: ['ma', 'momentum']
+  [2014] U= 82 | CAGR  +31.69% Sh  1.54 MDD -10.73% | QQQ  +19.18% | Excess  +12.51%p | top: ['lowvol', 'momentum']
+  [2015] U= 83 | CAGR  +26.93% Sh  1.32 MDD -13.71% | QQQ   +9.44% | Excess  +17.50%p | top: ['lowvol', 'momentum']
+  [2016] U= 86 | CAGR  +35.88% Sh  1.68 MDD -17.08% | QQQ   +7.10% | Excess  +28.78%p | top: ['momentum', 'ma']
+  [2017] U= 86 | CAGR  +33.01% Sh  2.08 MDD  -6.65% | QQQ  +32.81% | Excess   +0.20%p | top: ['lowvol', 'momentum']
+  [2018] U= 87 | CAGR   +0.85% Sh  0.16 MDD -25.38% | QQQ   -0.13% | Excess   +0.98%p | top: ['momentum', 'rsi']
+  [2019] U= 89 | CAGR  +54.68% Sh  2.30 MDD  -9.94% | QQQ  +38.96% | Excess  +15.71%p | top: ['momentum', 'rsi']
+  [2020] U= 92 | CAGR  +68.29% Sh  1.47 MDD -39.48% | QQQ  +48.17% | Excess  +20.12%p | top: ['lowvol', 'momentum']
+  [2021] U= 95 | CAGR  +19.37% Sh  0.80 MDD -18.01% | QQQ  +27.42% | Excess   -8.05%p | top: ['lowvol', 'momentum']
+  [2022] U= 96 | CAGR  -18.43% Sh -0.41 MDD -26.96% | QQQ  -32.68% | Excess  +14.25%p | top: ['momentum', 'ma']
+  [2023] U= 98 | CAGR  +63.95% Sh  2.30 MDD -11.37% | QQQ  +55.40% | Excess   +8.55%p | top: ['lowvol', 'momentum']
+  [2024] U= 98 | CAGR   +7.31% Sh  0.49 MDD -13.73% | QQQ  +25.58% | Excess  -18.27%p | top: ['momentum', 'ma']
+  [2025] U= 98 | CAGR  +18.39% Sh  0.84 MDD -23.34% | QQQ  +20.96% | Excess   -2.56%p | top: ['ma', 'momentum']
+
+====================================================================================================
+## 21-window aggregate
+  Avg Test CAGR:    +27.86%
+  Avg Test Sharpe:  1.27
+  Avg Test MDD:     -18.16%
+  Avg vs QQQ:       +10.16%p
+  Win rate:         17/21 (81%)
+
+## Statistical significance (alpha vs 0)
+  Mean alpha:       +10.16%p
+  Std (across win): 14.32%p
+  Standard error:   3.12%p
+  t-statistic:      3.25
+  → t > 2.0: 통계적으로 유의 (95% 신뢰도) ✅
+
+## 비교: 이전 11 윈도우 (2015-2025) vs 확장 21 윈도우
+  11 win (2015~25):  alpha +7.02%p, t=1.68
+  21 win (2005~25):  alpha +10.16%p, t=3.25
+
+## Top-2 feature 출현 빈도
+  momentum: 21/21회
+  lowvol: 12/21회
+  ma: 6/21회
+  rsi: 3/21회
+
+CSV: /home/dlfnek/stock_lab/results/ml_extended_walkforward.csv

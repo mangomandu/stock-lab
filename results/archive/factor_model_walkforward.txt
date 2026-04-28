@@ -1,0 +1,38 @@
+[2026-04-28 05:57:38.885750] Factor Model Walk-Forward (Biweekly Top-20)
+  Factors: ['momentum', 'lowvol', 'trend']
+  Cost: 0.10% round-trip
+====================================================================================================
+
+Universe: 98 tickers × 16187 dates
+Weight grid: 15 candidates per window
+
+  [2015] momentum:0.25, lowvol:0.75, trend:0.00 | train CAGR +21.77% | test CAGR +7.71% Sh 0.57 | QQQ +9.44% | Excess -1.73%p
+  [2016] momentum:0.00, lowvol:0.50, trend:0.50 | train CAGR +20.04% | test CAGR +11.95% Sh 0.97 | QQQ +7.10% | Excess +4.85%p
+  [2017] momentum:0.25, lowvol:0.00, trend:0.75 | train CAGR +31.04% | test CAGR +42.58% Sh 2.03 | QQQ +32.81% | Excess +9.77%p
+  [2018] momentum:0.50, lowvol:0.50, trend:0.00 | train CAGR +27.70% | test CAGR +9.31% Sh 0.54 | QQQ -0.13% | Excess +9.44%p
+  [2019] momentum:0.50, lowvol:0.50, trend:0.00 | train CAGR +21.92% | test CAGR +38.54% Sh 2.48 | QQQ +38.96% | Excess -0.42%p
+  [2020] momentum:0.00, lowvol:1.00, trend:0.00 | train CAGR +17.62% | test CAGR +20.06% Sh 0.75 | QQQ +48.17% | Excess -28.12%p
+  [2021] momentum:0.00, lowvol:0.00, trend:1.00 | train CAGR +30.72% | test CAGR +19.91% Sh 1.02 | QQQ +27.42% | Excess -7.51%p
+  [2022] momentum:0.50, lowvol:0.50, trend:0.00 | train CAGR +30.09% | test CAGR -4.49% Sh -0.11 | QQQ -32.68% | Excess +28.19%p
+  [2023] momentum:0.50, lowvol:0.50, trend:0.00 | train CAGR +20.14% | test CAGR +17.02% Sh 1.30 | QQQ +55.40% | Excess -38.38%p
+  [2024] momentum:0.25, lowvol:0.25, trend:0.50 | train CAGR +20.81% | test CAGR +15.84% Sh 1.01 | QQQ +25.58% | Excess -9.74%p
+  [2025] momentum:0.00, lowvol:0.00, trend:1.00 | train CAGR +19.26% | test CAGR +5.57% Sh 0.38 | QQQ +20.96% | Excess -15.38%p
+
+====================================================================================================
+## 11-window aggregate
+  Avg Test CAGR:   +16.73%
+  Avg Test Sharpe: 1.00
+  Avg Test MDD:    -13.75%
+  Avg vs QQQ:      -4.46%p
+  Win rate:        4/11 (36%)
+
+## Best factor weight 분포 (7 unique)
+  momentum:0.50, lowvol:0.50, trend:0.00: 4회
+  momentum:0.00, lowvol:0.00, trend:1.00: 2회
+  momentum:0.25, lowvol:0.75, trend:0.00: 1회
+  momentum:0.00, lowvol:0.50, trend:0.50: 1회
+  momentum:0.25, lowvol:0.00, trend:0.75: 1회
+  momentum:0.00, lowvol:1.00, trend:0.00: 1회
+  momentum:0.25, lowvol:0.25, trend:0.50: 1회
+
+CSV: /home/dlfnek/stock_lab/results/factor_model_walkforward.csv

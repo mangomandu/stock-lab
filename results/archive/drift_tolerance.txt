@@ -1,0 +1,55 @@
+[2026-04-28 10:17:10.824627] Drift Tolerance walk-forward
+  Rule: hold while in Top-K, sell when drops out
+====================================================================================================
+
+[Biweekly Top-20] running...
+  CAGR +27.86% | Sh 1.27 | MDD -18.16% | vs QQQ +10.16%p | win 17/21 | t=3.25 | avg reb 25
+
+[Weekly Top-20] running...
+  CAGR +26.23% | Sh 1.18 | MDD -18.61% | vs QQQ +8.53%p | win 16/21 | t=2.48 | avg reb 50
+
+[Daily Top-20] running...
+  CAGR +19.01% | Sh 0.90 | MDD -19.61% | vs QQQ +1.31%p | win 12/21 | t=0.41 | avg reb 252
+
+[Drift K=20 (strict)] running...
+  CAGR +18.88% | Sh 0.90 | MDD -19.50% | vs QQQ +1.18%p | win 11/21 | t=0.35 | avg reb 251
+
+[Drift K=25] running...
+  CAGR +21.44% | Sh 1.00 | MDD -19.02% | vs QQQ +3.74%p | win 13/21 | t=1.12 | avg reb 244
+
+[Drift K=30] running...
+  CAGR +23.50% | Sh 1.07 | MDD -18.82% | vs QQQ +5.80%p | win 14/21 | t=1.77 | avg reb 231
+
+[Drift K=35] running...
+  CAGR +25.01% | Sh 1.12 | MDD -18.43% | vs QQQ +7.31%p | win 15/21 | t=2.08 | avg reb 220
+
+[Drift K=40] running...
+  CAGR +25.32% | Sh 1.15 | MDD -18.60% | vs QQQ +7.62%p | win 14/21 | t=2.25 | avg reb 207
+
+[Drift K=50] running...
+  CAGR +25.03% | Sh 1.15 | MDD -18.66% | vs QQQ +7.33%p | win 16/21 | t=2.21 | avg reb 182
+
+[Drift K=60] running...
+  CAGR +24.90% | Sh 1.16 | MDD -18.13% | vs QQQ +7.20%p | win 14/21 | t=2.33 | avg reb 144
+
+[Drift K=80] running...
+  CAGR +26.90% | Sh 1.26 | MDD -17.69% | vs QQQ +9.21%p | win 17/21 | t=3.35 | avg reb 64
+
+========================================================================================================================
+## Summary (sorted by Sharpe)
+Config                           CAGR    Sh     MDD    vs QQQ      Win      t  Rebal/yr
+------------------------------------------------------------------------------------------------------------------------
+Biweekly Top-20               +27.86%  1.27 -18.16%   +10.16%p  17/21    3.25       25
+Drift K=80                    +26.90%  1.26 -17.69%    +9.21%p  17/21    3.35       64
+Weekly Top-20                 +26.23%  1.18 -18.61%    +8.53%p  16/21    2.48       50
+Drift K=60                    +24.90%  1.16 -18.13%    +7.20%p  14/21    2.33      144
+Drift K=50                    +25.03%  1.15 -18.66%    +7.33%p  16/21    2.21      182
+Drift K=40                    +25.32%  1.15 -18.60%    +7.62%p  14/21    2.25      207
+Drift K=35                    +25.01%  1.12 -18.43%    +7.31%p  15/21    2.08      220
+Drift K=30                    +23.50%  1.07 -18.82%    +5.80%p  14/21    1.77      231
+Drift K=25                    +21.44%  1.00 -19.02%    +3.74%p  13/21    1.12      244
+Daily Top-20                  +19.01%  0.90 -19.61%    +1.31%p  12/21    0.41      252
+Drift K=20 (strict)           +18.88%  0.90 -19.50%    +1.18%p  11/21    0.35      251
+
+★ Best Sharpe: Biweekly Top-20
+  CAGR +27.86%, Sharpe 1.27, vs QQQ +10.16%p, t=3.25

@@ -1,0 +1,43 @@
+[2026-04-28 05:30:30.431416] Bonus: rebalance frequency / Top-10 + CASH
+================================================================================
+
+[Daily Top-20] running walk-forward...
+  Avg CAGR +19.82%, Sharpe 0.94, MDD -18.93%, vs QQQ -1.37%p, win 3/11
+
+[Weekly Top-20 (baseline)] running walk-forward...
+  Avg CAGR +19.18%, Sharpe 0.99, MDD -16.94%, vs QQQ -2.00%p, win 4/11
+
+[Biweekly Top-20] running walk-forward...
+  Avg CAGR +24.12%, Sharpe 1.21, MDD -15.15%, vs QQQ +2.94%p, win 7/11
+
+[Monthly Top-20] running walk-forward...
+  Avg CAGR +21.07%, Sharpe 1.05, MDD -17.17%, vs QQQ -0.11%p, win 7/11
+
+[Weekly Top-10] running walk-forward...
+  Avg CAGR +18.55%, Sharpe 0.87, MDD -17.73%, vs QQQ -2.64%p, win 5/11
+
+[Weekly Top-10 + CASH(70)] running walk-forward...
+  Avg CAGR +15.36%, Sharpe 0.78, MDD -16.08%, vs QQQ -5.82%p, win 3/11
+
+[Weekly Top-10 + CASH(80)] running walk-forward...
+  Avg CAGR +15.98%, Sharpe 0.82, MDD -16.07%, vs QQQ -5.21%p, win 3/11
+
+[Monthly Top-10 + CASH(70)] running walk-forward...
+  Avg CAGR +14.75%, Sharpe 0.82, MDD -16.26%, vs QQQ -6.43%p, win 5/11
+
+==========================================================================================
+Config                             Avg CAGR   Avg Sh    Avg MDD     vs QQQ      Win
+------------------------------------------------------------------------------------------
+Daily Top-20                        +19.82%     0.94    -18.93%     -1.37%p 3/ 11
+Weekly Top-20 (baseline)            +19.18%     0.99    -16.94%     -2.00%p 4/ 11
+Biweekly Top-20                     +24.12%     1.21    -15.15%     +2.94%p 7/ 11
+Monthly Top-20                      +21.07%     1.05    -17.17%     -0.11%p 7/ 11
+Weekly Top-10                       +18.55%     0.87    -17.73%     -2.64%p 5/ 11
+Weekly Top-10 + CASH(70)            +15.36%     0.78    -16.08%     -5.82%p 3/ 11
+Weekly Top-10 + CASH(80)            +15.98%     0.82    -16.07%     -5.21%p 3/ 11
+Monthly Top-10 + CASH(70)           +14.75%     0.82    -16.26%     -6.43%p 5/ 11
+==========================================================================================
+
+★ vs QQQ excess 최고: Biweekly Top-20
+  Avg CAGR 24.12%, Sharpe 1.21, MDD -15.15%
+  vs QQQ excess: +2.94%p, win 7/11

@@ -1,0 +1,79 @@
+[2026-04-28 10:14:12.506558] Daily ML Top-20 turnover measurement
+  Question: do daily recommendations actually change a lot?
+==========================================================================================
+
+[2018] training + measuring...
+  Avg daily turnover: 14.80% (median 15.0%, p75 20.0%, p95 30.0%, max 45.0%)
+  Avg score spread (top-rest): 0.0041
+
+[2019] training + measuring...
+  Avg daily turnover: 38.84% (median 40.0%, p75 45.0%, p95 65.0%, max 75.0%)
+  Avg score spread (top-rest): 0.0021
+
+[2020] training + measuring...
+  Avg daily turnover: 21.87% (median 20.0%, p75 25.0%, p95 45.0%, max 60.0%)
+  Avg score spread (top-rest): 0.0074
+
+[2021] training + measuring...
+  Avg daily turnover: 16.61% (median 15.0%, p75 20.0%, p95 30.0%, max 40.0%)
+  Avg score spread (top-rest): 0.0190
+
+[2022] training + measuring...
+  Avg daily turnover: 28.64% (median 25.0%, p75 35.0%, p95 65.0%, max 85.0%)
+  Avg score spread (top-rest): 0.0041
+
+[2023] training + measuring...
+  Avg daily turnover: 26.61% (median 25.0%, p75 35.0%, p95 48.0%, max 65.0%)
+  Avg score spread (top-rest): 0.0088
+
+[2024] training + measuring...
+  Avg daily turnover: 48.71% (median 45.0%, p75 55.0%, p95 85.0%, max 100.0%)
+  Avg score spread (top-rest): 0.0023
+
+[2025] training + measuring...
+  Avg daily turnover: 44.48% (median 40.0%, p75 50.0%, p95 75.0%, max 95.0%)
+  Avg score spread (top-rest): 0.0031
+
+==========================================================================================
+## Aggregate (8 years, 2,003 day-to-day transitions)
+  Mean daily turnover:   30.06%
+  Median daily turnover: 25.00%
+  25th percentile:       15.00%
+  75th percentile:       40.00%
+  95th percentile:       65.00%
+  Max:                   100.00%
+  Days with 0 changes:   9/2003 (0.4%)
+  Days with ≥30% changes: 952/2003 (47.5%)
+  Days with ≥50% changes: 303/2003 (15.1%)
+
+## Top-20 안에서 매일 종목 교체 수 분포
+   0개 교체:    9일 (  0.4%) 
+   1개 교체:   84일 (  4.2%) █████████
+   2개 교체:  182일 (  9.1%) ███████████████████
+   3개 교체:  254일 ( 12.7%) ███████████████████████████
+   4개 교체:  275일 ( 13.7%) ██████████████████████████████
+   5개 교체:  247일 ( 12.3%) ██████████████████████████
+   6개 교체:  182일 (  9.1%) ███████████████████
+   7개 교체:  180일 (  9.0%) ███████████████████
+   8개 교체:  160일 (  8.0%) █████████████████
+   9개 교체:  127일 (  6.3%) █████████████
+  10개 교체:   88일 (  4.4%) █████████
+  11개 교체:   61일 (  3.0%) ██████
+  12개 교체:   41일 (  2.0%) ████
+  13개 교체:   43일 (  2.1%) ████
+  14개 교체:   21일 (  1.0%) ██
+  15개 교체:   16일 (  0.8%) █
+  16개 교체:   10일 (  0.5%) █
+  17개 교체:    5일 (  0.2%) 
+  18개 교체:    5일 (  0.2%) 
+  19개 교체:    8일 (  0.4%) 
+  20개 교체:    5일 (  0.2%) 
+
+## 해석
+  하루 평균 Top-20 중 약 6.0개 종목 교체
+  → 일별 변동 큼. 매매 빈도 늘릴 가치 있음
+
+## Biweekly stale 정도 추정
+  매일 평균 30.1% turnover
+  10일 후 추정 누적 turnover: ~100% (independent 가정 상한)
+  실측은 walk-forward 결과로 대체 (overlap 효과)

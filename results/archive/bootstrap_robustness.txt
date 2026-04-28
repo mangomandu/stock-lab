@@ -1,0 +1,70 @@
+[2026-04-28 06:23:39.130364] Bootstrap Robustness Check
+  N bootstrap runs: 30
+  Universe subset:  70% of tickers (random)
+  Walk-forward:     2005~2025 (21 windows)
+  Seed:             42
+==========================================================================================
+
+Full universe: 98 tickers
+Each bootstrap: keep 68 tickers, drop 30
+
+  [Run  1] mean alpha  +6.11%p, t= 2.97, win 15/21 (71%)
+  [Run  2] mean alpha  +6.54%p, t= 2.28, win 15/21 (71%)
+  [Run  3] mean alpha  +5.10%p, t= 1.80, win 16/21 (76%)
+  [Run  4] mean alpha  +3.15%p, t= 1.23, win 14/21 (67%)
+  [Run  5] mean alpha  +7.25%p, t= 3.74, win 16/21 (76%)
+  [Run  6] mean alpha +10.44%p, t= 3.15, win 15/21 (71%)
+  [Run  7] mean alpha  +9.07%p, t= 3.37, win 16/21 (76%)
+  [Run  8] mean alpha  +7.39%p, t= 3.42, win 16/21 (76%)
+  [Run  9] mean alpha  +6.12%p, t= 2.30, win 14/21 (67%)
+  [Run 10] mean alpha  +8.75%p, t= 3.34, win 18/21 (86%)
+  [Run 11] mean alpha  +8.21%p, t= 3.22, win 18/21 (86%)
+  [Run 12] mean alpha  +7.24%p, t= 3.24, win 17/21 (81%)
+  [Run 13] mean alpha  +6.58%p, t= 2.64, win 16/21 (76%)
+  [Run 14] mean alpha  +8.65%p, t= 3.10, win 15/21 (71%)
+  [Run 15] mean alpha  +6.90%p, t= 4.50, win 19/21 (90%)
+  [Run 16] mean alpha  +2.89%p, t= 0.94, win 11/21 (52%)
+  [Run 17] mean alpha  +3.06%p, t= 1.24, win 15/21 (71%)
+  [Run 18] mean alpha  +6.13%p, t= 1.85, win 15/21 (71%)
+  [Run 19] mean alpha  +6.56%p, t= 2.44, win 16/21 (76%)
+  [Run 20] mean alpha  +5.88%p, t= 2.52, win 15/21 (71%)
+  [Run 21] mean alpha  +5.72%p, t= 2.16, win 13/21 (62%)
+  [Run 22] mean alpha  +6.77%p, t= 3.28, win 17/21 (81%)
+  [Run 23] mean alpha  +4.84%p, t= 1.85, win 14/21 (67%)
+  [Run 24] mean alpha  +4.84%p, t= 1.79, win 15/21 (71%)
+  [Run 25] mean alpha  +8.02%p, t= 2.92, win 15/21 (71%)
+  [Run 26] mean alpha  +8.20%p, t= 3.18, win 18/21 (86%)
+  [Run 27] mean alpha  +8.50%p, t= 2.90, win 16/21 (76%)
+  [Run 28] mean alpha  +5.07%p, t= 1.77, win 15/21 (71%)
+  [Run 29] mean alpha  +5.46%p, t= 1.88, win 15/21 (71%)
+  [Run 30] mean alpha  +8.18%p, t= 3.49, win 15/21 (71%)
+
+==========================================================================================
+## Bootstrap aggregate (30 runs)
+  Alpha distribution:
+    Mean of means:   +6.59%p
+    Std of means:    1.80%p
+    Min:             +2.89%p
+    Max:             +10.44%p
+    25th pctile:     +5.46%p
+    50th pctile:     +6.58%p
+    75th pctile:     +8.18%p
+
+  Significance (t-stat) distribution:
+    Mean t:          2.62
+    Min t:           0.94
+    Max t:           4.50
+    Runs with t>2:   21/30 (70%)
+
+  Win rate distribution:
+    Mean:            73.8%
+    Min:             52.4%
+    Max:             90.5%
+
+## 해석
+  Full universe (98 tickers) alpha: +10.16%p, t=3.25
+  Bootstrap (70%, 30 runs) avg: +6.59%p
+  알파 변동: +35.2% (양수면 universe 줄여도 알파 유지)
+  → 알파 일부 약화. 특정 winners 영향 있음. △
+
+CSV: /home/dlfnek/stock_lab/results/bootstrap_robustness.csv

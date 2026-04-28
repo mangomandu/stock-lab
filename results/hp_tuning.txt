@@ -1,0 +1,83 @@
+[2026-04-28 11:51:40.586957] LightGBM hyperparameter random search
+  Trials: 20, Seed: 42
+==============================================================================================================
+Loaded 518 tickers
+
+
+[Baseline (default HP)] running...
+  CAGR +31.75% Sh 1.21 vs SPY +19.66%p t=4.50
+
+[Trial 1/20] lr=0.02 leaves=15 min=100 ff=0.8 bf=0.6 R=100
+  CAGR +29.92% Sh 1.17 vs SPY +17.83%p t=3.96
+
+[Trial 2/20] lr=0.02 leaves=15 min=200 ff=0.7 bf=0.6 R=100
+  CAGR +31.09% Sh 1.19 vs SPY +19.00%p t=4.30
+
+[Trial 3/20] lr=0.05 leaves=31 min=20 ff=0.8 bf=1.0 R=400
+  CAGR +30.05% Sh 1.21 vs SPY +17.95%p t=5.12
+
+[Trial 4/20] lr=0.2 leaves=31 min=200 ff=0.9 bf=0.6 R=100
+  CAGR +23.72% Sh 1.10 vs SPY +11.63%p t=3.99
+
+[Trial 5/20] lr=0.2 leaves=63 min=100 ff=0.8 bf=0.6 R=200
+  CAGR +24.59% Sh 1.11 vs SPY +12.49%p t=4.07
+
+[Trial 6/20] lr=0.02 leaves=15 min=200 ff=0.7 bf=0.8 R=200
+  CAGR +31.67% Sh 1.22 vs SPY +19.58%p t=4.91
+
+[Trial 7/20] lr=0.1 leaves=15 min=200 ff=0.7 bf=0.8 R=100
+  CAGR +31.78% Sh 1.24 vs SPY +19.68%p t=4.84
+
+[Trial 8/20] lr=0.1 leaves=63 min=50 ff=0.7 bf=0.6 R=400
+  CAGR +30.46% Sh 1.22 vs SPY +18.36%p t=4.77
+
+[Trial 9/20] lr=0.05 leaves=63 min=20 ff=0.8 bf=0.6 R=200
+  CAGR +27.50% Sh 1.12 vs SPY +15.40%p t=3.76
+
+[Trial 10/20] lr=0.1 leaves=127 min=100 ff=0.8 bf=0.8 R=200
+  CAGR +22.82% Sh 1.01 vs SPY +10.72%p t=2.96
+
+[Trial 11/20] lr=0.05 leaves=63 min=20 ff=0.8 bf=1.0 R=400
+  CAGR +27.96% Sh 1.14 vs SPY +15.87%p t=4.62
+
+[Trial 12/20] lr=0.05 leaves=31 min=200 ff=1.0 bf=0.8 R=400
+  CAGR +27.15% Sh 1.11 vs SPY +15.05%p t=3.65
+
+[Trial 13/20] lr=0.05 leaves=63 min=20 ff=0.8 bf=0.6 R=200
+  CAGR +27.50% Sh 1.12 vs SPY +15.40%p t=3.76
+
+[Trial 14/20] lr=0.2 leaves=63 min=20 ff=0.8 bf=1.0 R=400
+  CAGR +26.29% Sh 1.10 vs SPY +14.20%p t=4.08
+
+[Trial 15/20] lr=0.1 leaves=31 min=200 ff=1.0 bf=1.0 R=200
+  CAGR +25.00% Sh 1.05 vs SPY +12.90%p t=3.78
+
+[Trial 16/20] lr=0.05 leaves=63 min=50 ff=0.8 bf=1.0 R=400
+  CAGR +27.53% Sh 1.13 vs SPY +15.43%p t=4.92
+
+[Trial 17/20] lr=0.1 leaves=127 min=200 ff=0.9 bf=0.6 R=100
+  CAGR +24.20% Sh 1.12 vs SPY +12.11%p t=3.97
+
+[Trial 18/20] lr=0.2 leaves=15 min=20 ff=0.7 bf=0.6 R=400
+  CAGR +28.55% Sh 1.20 vs SPY +16.46%p t=4.87
+
+[Trial 19/20] lr=0.05 leaves=127 min=20 ff=1.0 bf=0.8 R=400
+  CAGR +24.47% Sh 1.03 vs SPY +12.37%p t=3.42
+
+[Trial 20/20] lr=0.2 leaves=63 min=20 ff=0.7 bf=1.0 R=400
+  CAGR +26.45% Sh 1.15 vs SPY +14.35%p t=4.75
+
+==============================================================================================================
+## Top 10 by Sharpe
+Rank      CAGR    Sh    vs SPY      t  HP
+--------------------------------------------------------------------------------------------------------------
+1      +31.78%  1.24   +19.68%p   4.84  lr=0.1 leaves=15 min=200 ff=0.7 bf=0.8 R=100
+2      +31.67%  1.22   +19.58%p   4.91  lr=0.02 leaves=15 min=200 ff=0.7 bf=0.8 R=200
+3      +30.46%  1.22   +18.36%p   4.77  lr=0.1 leaves=63 min=50 ff=0.7 bf=0.6 R=400
+4      +31.75%  1.21   +19.66%p   4.50  lr=0.05 leaves=31 min=50 ff=0.9 bf=0.8 R=200
+5      +30.05%  1.21   +17.95%p   5.12  lr=0.05 leaves=31 min=20 ff=0.8 bf=1.0 R=400
+6      +28.55%  1.20   +16.46%p   4.87  lr=0.2 leaves=15 min=20 ff=0.7 bf=0.6 R=400
+7      +31.09%  1.19   +19.00%p   4.30  lr=0.02 leaves=15 min=200 ff=0.7 bf=0.6 R=100
+8      +29.92%  1.17   +17.83%p   3.96  lr=0.02 leaves=15 min=100 ff=0.8 bf=0.6 R=100
+9      +26.45%  1.15   +14.35%p   4.75  lr=0.2 leaves=63 min=20 ff=0.7 bf=1.0 R=400
+10     +27.96%  1.14   +15.87%p   4.62  lr=0.05 leaves=63 min=20 ff=0.8 bf=1.0 R=400

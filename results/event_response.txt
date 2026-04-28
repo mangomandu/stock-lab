@@ -1,0 +1,104 @@
+[2026-04-28 10:39:48.753491] Event Response Analysis
+====================================================================================================
+
+Loaded 15/15 ETFs
+
+## Average sector return after major events (positive = recovery winner)
+
+### 5-day horizon (40 events with valid data)
+Sector                      Mean Ret      Std    N
+--------------------------------------------------
+  Healthcare                    +1.80%    2.64%   40
+  ConsumerStaples               +1.69%    2.57%   40
+  ConsumerDiscretionary         +1.61%    3.46%   40
+  Gold                          +1.55%    3.42%   40
+  Industrials                   +1.55%    3.92%   40
+  Technology                    +1.49%    4.37%   40
+  Financials                    +1.48%    5.45%   40
+  Materials                     +1.42%    3.74%   40
+  LongTreasury                  +0.65%    2.50%   40
+  Utilities                     +0.42%    3.23%   40
+  Energy                        +0.40%    4.83%   40
+  ShortTreasury                 +0.21%    0.37%   40
+  RealEstate                    +0.16%    2.82%   40
+  Communications                +0.04%    2.55%   40
+  Aerospace/Defense             -0.73%    4.67%   40
+
+### 30-day horizon (40 events with valid data)
+Sector                      Mean Ret      Std    N
+--------------------------------------------------
+  Technology                    +5.12%    9.80%   40
+  ConsumerDiscretionary         +4.35%   10.16%   40
+  Healthcare                    +4.24%    6.47%   40
+  Industrials                   +4.23%    9.34%   40
+  Financials                    +3.74%   11.31%   40
+  LongTreasury                  +3.64%    4.38%   40
+  Materials                     +3.54%   10.48%   40
+  Energy                        +2.52%   12.59%   40
+  ConsumerStaples               +2.46%    5.92%   40
+  RealEstate                    +1.98%    2.43%   40
+  Utilities                     +1.45%    6.64%   40
+  ShortTreasury                 +0.43%    0.36%   40
+  Gold                          -0.43%    5.30%   40
+  Communications                -1.02%    5.46%   40
+  Aerospace/Defense             -1.88%   11.94%   40
+
+### 60-day horizon (40 events with valid data)
+Sector                      Mean Ret      Std    N
+--------------------------------------------------
+  ConsumerDiscretionary         +8.76%   12.98%   40
+  Financials                    +8.47%   14.19%   40
+  Technology                    +7.55%   15.55%   40
+  Industrials                   +6.85%   13.18%   40
+  Healthcare                    +5.88%    9.15%   40
+  RealEstate                    +5.84%    3.22%   40
+  Energy                        +5.74%   17.10%   40
+  Materials                     +5.29%   14.49%   40
+  ConsumerStaples               +3.76%    6.50%   40
+  LongTreasury                  +2.76%    5.16%   40
+  Utilities                     +1.47%    9.48%   40
+  Communications                +1.09%    9.41%   40
+  Aerospace/Defense             +0.99%   14.33%   40
+  ShortTreasury                 +0.66%    0.59%   40
+  Gold                          -1.21%    5.69%   40
+
+## Excess return vs SPY (sector outperformance)
+
+### 5-day horizon (SPY avg: +1.93%)
+Sector                        Excess
+----------------------------------------
+  Healthcare                    -0.14%p
+  ConsumerStaples               -0.25%p
+  ConsumerDiscretionary         -0.33%p
+  Gold                          -0.38%p
+  Industrials                   -0.38%p
+  ...
+  RealEstate                    -1.78%p
+  Communications                -1.89%p
+  Aerospace/Defense             -2.66%p
+
+### 30-day horizon (SPY avg: +4.64%)
+Sector                        Excess
+----------------------------------------
+  Technology                    +0.47%p
+  ConsumerDiscretionary         -0.29%p
+  Healthcare                    -0.40%p
+  Industrials                   -0.41%p
+  Financials                    -0.90%p
+  ...
+  Gold                          -5.07%p
+  Communications                -5.66%p
+  Aerospace/Defense             -6.52%p
+
+### 60-day horizon (SPY avg: +7.51%)
+Sector                        Excess
+----------------------------------------
+  ConsumerDiscretionary         +1.24%p
+  Financials                    +0.95%p
+  Technology                    +0.04%p
+  Industrials                   -0.66%p
+  Healthcare                    -1.64%p
+  ...
+  Aerospace/Defense             -6.52%p
+  ShortTreasury                 -6.85%p
+  Gold                          -8.72%p

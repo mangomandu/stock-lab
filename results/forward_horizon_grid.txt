@@ -1,0 +1,37 @@
+[2026-04-28 11:25:14.204556] Forward horizon grid
+==========================================================================================
+Loaded 518 tickers
+
+
+[5d forward / Weekly] running...
+  N=31 | CAGR +42.53% Sh 1.64 MDD -18.08% | vs SPY +29.87%p | win 27/31 | t=5.46
+
+[5d forward / Biweekly] running...
+  N=31 | CAGR +35.85% Sh 1.49 MDD -18.92% | vs SPY +23.19%p | win 26/31 | t=5.91
+
+[10d forward / Weekly] running...
+  N=31 | CAGR +43.69% Sh 1.64 MDD -18.91% | vs SPY +31.03%p | win 26/31 | t=6.02
+
+[10d forward / Biweekly (current)] running...
+  N=31 | CAGR +41.41% Sh 1.58 MDD -19.18% | vs SPY +28.75%p | win 28/31 | t=6.05
+
+[10d forward / Monthly] running...
+  N=31 | CAGR +36.37% Sh 1.44 MDD -18.96% | vs SPY +23.71%p | win 28/31 | t=5.46
+
+[20d forward / Biweekly] running...
+  N=31 | CAGR +43.60% Sh 1.47 MDD -20.70% | vs SPY +30.94%p | win 26/31 | t=4.37
+
+[20d forward / Monthly] running...
+  N=31 | CAGR +43.47% Sh 1.43 MDD -20.01% | vs SPY +30.81%p | win 29/31 | t=4.10
+
+====================================================================================================
+## Summary (sorted by Sharpe)
+Config                                  CAGR    Sh      MDD    vs SPY      Win      t
+----------------------------------------------------------------------------------------------------
+5d forward / Weekly                  +42.53%  1.64  -18.08%   +29.87%p  27/31    5.46
+10d forward / Weekly                 +43.69%  1.64  -18.91%   +31.03%p  26/31    6.02
+10d forward / Biweekly (current)     +41.41%  1.58  -19.18%   +28.75%p  28/31    6.05
+5d forward / Biweekly                +35.85%  1.49  -18.92%   +23.19%p  26/31    5.91
+20d forward / Biweekly               +43.60%  1.47  -20.70%   +30.94%p  26/31    4.37
+10d forward / Monthly                +36.37%  1.44  -18.96%   +23.71%p  28/31    5.46
+20d forward / Monthly                +43.47%  1.43  -20.01%   +30.81%p  29/31    4.10
