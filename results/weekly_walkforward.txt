@@ -1,0 +1,64 @@
+[2026-04-29 08:22:06.268580] Weekly walk-forward 2025-2026
+  Features: ['lowvol', 'rsi', 'volsurge'] | Top-20 | Train 7y
+====================================================================================================
+
+Total weeks: 70
+Range: 2025-01-02 ~ 2026-04-27
+
+  Week  1 (2025-01-02): Port  +0.12% | SPY  -0.71% | Excess  +0.83%p | Top-3: ['SMCI', 'COIN', 'CVNA']
+  Week  2 (2025-01-06): Port  -4.68% | SPY  -2.21% | Excess  -2.47%p | Top-3: ['SMCI', 'CVNA', 'COIN']
+  Week  3 (2025-01-13): Port  +8.15% | SPY  +3.73% | Excess  +4.43%p | Top-3: ['SMCI', 'COIN', 'CVNA']
+  Week  4 (2025-01-21): Port  -1.86% | SPY  +0.24% | Excess  -2.10%p | Top-3: ['SMCI', 'VXX', 'COIN']
+  Week  5 (2025-01-27): Port  +3.65% | SPY  -0.27% | Excess  +3.92%p | Top-3: ['SMCI', 'COIN', 'APP']
+  Week 10 (2025-03-03): Port  -9.68% | SPY  -3.97% | Excess  -5.70%p | Top-3: ['SMCI', 'COIN', 'VST']
+  Week 15 (2025-04-07): Port  +8.23% | SPY  +6.89% | Excess  +1.35%p | Top-3: ['SMCI', 'COIN', 'VRT']
+  Week 20 (2025-05-12): Port  +7.81% | SPY  +2.03% | Excess  +5.78%p | Top-3: ['VXX', 'SMCI', 'COIN']
+  Week 25 (2025-06-16): Port  +4.01% | SPY  +0.98% | Excess  +3.04%p | Top-3: ['SMCI', 'VXX', 'APP']
+  Week 30 (2025-07-21): Port  +2.42% | SPY  +1.30% | Excess  +1.12%p | Top-3: ['SMCI', 'VXX', 'APP']
+  Week 35 (2025-08-25): Port  +4.41% | SPY  -0.34% | Excess  +4.76%p | Top-3: ['SMCI', 'VXX', 'COIN']
+  Week 40 (2025-09-29): Port  +2.83% | SPY  +1.19% | Excess  +1.64%p | Top-3: ['SATS', 'SMCI', 'APP']
+  Week 45 (2025-11-03): Port  -1.38% | SPY  -0.28% | Excess  -1.10%p | Top-3: ['SATS', 'SMCI', 'APP']
+  Week 50 (2025-12-08): Port  -3.33% | SPY  -0.42% | Excess  -2.91%p | Top-3: ['SATS', 'SMCI', 'VXX']
+  Week 55 (2026-01-12): Port  -0.62% | SPY  -2.53% | Excess  +1.91%p | Top-3: ['SATS', 'SMCI', 'APP']
+  Week 60 (2026-02-17): Port  +3.08% | SPY  +0.66% | Excess  +2.42%p | Top-3: ['SATS', 'SNDK', 'APP']
+  Week 65 (2026-03-23): Port  -7.08% | SPY  -3.57% | Excess  -3.51%p | Top-3: ['SATS', 'SMCI', 'SNDK']
+
+====================================================================================================
+## Aggregate (69 weeks)
+  Average weekly portfolio return:    +1.56%
+  Average weekly SPY return:          +0.40%
+  Average weekly excess (alpha):      +1.15%p
+  Annualized excess:                  +60.02%p
+  Cumulative portfolio:               +165.30%
+  Cumulative SPY:                     +29.42%
+  Cumulative excess:                  +135.87%p
+  Win rate (port > SPY):              43/69 (62.3%)
+  Best week:                          +10.09%p (2025-04-21)
+  Worst week:                         -6.85%p (2025-02-18)
+
+## Weekly excess distribution
+  P10: -3.05%p
+  P25: -1.10%p
+  P50: +1.00%p
+  P75: +3.57%p
+  P90: +5.69%p
+
+## Per-month aggregate
+Month       Weeks    Avg α   Cum Port    Cum SPY     Diff
+------------------------------------------------------------
+2025-01         5   +0.92p     +4.99%     +0.69%   +4.30p
+2025-02         4   -1.07p     -7.87%     -2.83%   -5.04p
+2025-03         5   +0.89p    -10.38%    -13.34%   +2.96p
+2025-04         4   +2.78p    +26.63%    +14.63%  +12.00p
+2025-05         4   +2.49p    +16.34%     +5.78%  +10.56p
+2025-06         5   +2.68p    +20.90%     +6.13%  +14.77p
+2025-07         4   +0.34p     +3.06%     +1.69%   +1.37p
+2025-08         4   +0.71p     +4.23%     +1.44%   +2.78p
+2025-09         5   +2.32p    +17.90%     +5.43%  +12.47p
+2025-10         4   +0.05p     +1.87%     +1.75%   +0.12p
+2025-11         4   -0.77p     -3.68%     -0.26%   -3.41p
+2025-12         5   +1.01p     +6.76%     +1.87%   +4.88p
+2026-01         4   -1.05p     -2.65%     +1.52%   -4.17p
+2026-02         4   +2.27p     +8.45%     -0.58%   +9.03p
+2026-03         5   +1.51p     +2.95%     -3.69%   +6.64p
+2026-04         3   +3.32p    +19.17%     +8.54%  +10.64p

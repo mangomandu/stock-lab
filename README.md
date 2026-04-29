@@ -18,6 +18,32 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 자세한 보고서: `reports/final_tuning_report.md`
 
+### Weekly Walk-Forward (v5 minimum, 2025-2026)
+
+매주 월요일마다 직전 7년으로 Ridge 재학습 → Top-20 → 5거래일 보유. **OOS 시뮬레이션**.
+
+| 항목 | 값 |
+|---|---|
+| 기간 | 2025-01-02 ~ 2026-04-27 (**69주**) |
+| 주당 평균 알파 | **+1.15%p** |
+| 연환산 알파 | **+60.02%p** |
+| 누적 portfolio | **+165.30%** (복리) |
+| 누적 SPY | +29.42% |
+| **누적 초과수익** | **+135.87%p** |
+| 승률 (port > SPY) | 43/69 (62.3%) |
+| 베스트 주 | +10.09%p (2025-04-21) |
+| 워스트 주 | -6.85%p (2025-02-18) |
+| P10 / P50 / P90 | -3.05%p / +1.00%p / +5.69%p |
+
+**월별 누적 비교 (포인트)**:
+- 강세: 2025-04 (+12.0p), 2025-06 (+14.8p), 2025-09 (+12.5p), 2026-04 (+10.6p)
+- 약세: 2025-02 (-5.0p), 2025-11 (-3.4p), 2026-01 (-4.2p)
+- **16개월 중 12개월 SPY 초과** (75%)
+
+> **Note**: 31 windows (1995-2025) 년간 백테스트 (+34.16%p) 대비 2025-2026이 유난히 좋은 환경 (mid-cap 강세). 미래 보수 추정은 여전히 **+20~25%p**.
+
+→ 출처: `tests/test_weekly_walkforward.py` → `results/weekly_walkforward.txt`, `weekly_walkforward.csv`
+
 ## 핵심 설정 (v5 best)
 
 | 항목 | 값 | 검증 |
@@ -28,8 +54,8 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 | Train years | **7** | ✅ Sweet spot (3/5/7/10 비교) |
 | Forward horizon | 10 days | ✅ |
 | Rebalance | **Weekly** (5 trading days) | ✅ Best (Daily/Weekly/Biweekly/Monthly 비교) |
-| Top-N | **20** (10/15도 가능) | ✅ |
-| Sector cap | None (또는 25%) | ✅ Cap 25-30%이 약간 더 좋음 |
+| Top-N | **15 또는 20** | ✅ Top-15 Cap15% / Top-20 Cap20% Sharpe 1.84 동률 |
+| Sector cap | **15-20%** (균형) 또는 30% (공격) | ✅ 매트릭스 검증 완료 |
 | Cost | 0.10% round-trip | 검증 가정 |
 
 ### Feature Set 비교
@@ -44,43 +70,51 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 **충격**: Momentum/MA/Trend가 redundant. 학계 표준 momentum factor가 우리 모델에선 noise.
 
-### Top-N × Sector Cap Cross 매트릭스 (검증 완료)
+### Top-N × Sector Cap Cross 매트릭스 (v5 / 3-feature, 검증 완료)
 
 **Sharpe 매트릭스**
 
 | | None | Cap 30% | Cap 25% | Cap 20% | Cap 15% |
 |---|---|---|---|---|---|
-| **Top-10** | 1.62 | 1.65 | 1.68 | 1.68 | **1.74** ⭐ |
-| **Top-15** | 1.63 | 1.71 | **1.72** | 1.72 | 1.71 |
-| **Top-20** | 1.63 | 1.67 | 1.68 | 1.70 | 1.72 |
+| **Top-10** | 1.73 | 1.78 | 1.76 | 1.76 | 1.75 |
+| **Top-15** | 1.74 | 1.81 | 1.81 | 1.81 | **1.84** ⭐ |
+| **Top-20** | 1.79 | 1.78 | 1.80 | **1.84** ⭐ | 1.82 |
 
 **Alpha 매트릭스 (vs SPY %p)**
 
 | | None | Cap 30% | Cap 25% | Cap 20% | Cap 15% |
 |---|---|---|---|---|---|
-| **Top-10** | +43.2 | **+43.6** ⭐ | +41.2 | +41.2 | +36.1 |
-| **Top-15** | +35.4 | +36.1 | +35.6 | +35.6 | +31.9 |
-| **Top-20** | +31.0 | +31.6 | +31.4 | +30.6 | +29.3 |
+| **Top-10** | +44.0 | **+45.2** ⭐ | +41.7 | +41.7 | +35.2 |
+| **Top-15** | +37.5 | +38.9 | +37.7 | +37.7 | +34.9 |
+| **Top-20** | +34.6 | +33.9 | +34.4 | +33.6 | +31.7 |
 
 **MDD 매트릭스**
 
 | | None | Cap 30% | Cap 25% | Cap 20% | Cap 15% |
 |---|---|---|---|---|---|
-| **Top-10** | -24.1% | -23.6% | -22.7% | -22.7% | -19.9% |
-| **Top-15** | -22.3% | -21.0% | -20.7% | -20.7% | -19.7% |
-| **Top-20** | -21.0% | -20.5% | -20.4% | -20.2% | **-19.4%** ⭐ |
+| **Top-10** | -23.3% | -22.6% | -22.4% | -22.4% | -19.9% |
+| **Top-15** | -22.0% | -21.3% | -20.8% | -20.8% | -19.9% |
+| **Top-20** | -20.9% | -20.7% | -20.4% | -20.1% | **-19.7%** ⭐ |
 
-→ 출처: `tests/test_topn_cap_cross.py` → `results/topn_cap_cross.txt`
+→ 출처: `tests/test_3feature_topn_cap_cross.py` → `results/topn_cap_cross_3feature.txt`
 
-### 타입별 추천
+> **v4(6-feature) 대비 향상**: 모든 config가 Sharpe +0.05~0.16, alpha +1~2%p 개선. 3-feature가 압승.
 
-| 사용자 | 권장 | Sharpe | Alpha | MDD |
-|---|---|---|---|---|
-| **안정 우선** | Top-20 + Cap 15% | 1.72 | +29.3%p | -19.4% |
-| **균형** ⭐ | Top-15 + Cap 25% | 1.72 | +35.6%p | -20.7% |
-| **공격** | Top-10 + Cap 30% | 1.65 | +43.6%p | -23.6% |
-| **공격 + 안정** | Top-10 + Cap 15% | 1.74 | +36.1%p | -19.9% |
-| **단순** | Top-20 No cap | 1.63 | +31.0%p | -21.0% |
+### 타입별 추천 (v5)
+
+| 사용자 | 권장 | Sharpe | Alpha | MDD | t-stat |
+|---|---|---|---|---|---|
+| **안정 우선** (낮은 MDD) | Top-20 + Cap 15% | 1.82 | +31.7%p | **-19.7%** | 7.16 |
+| **균형 1위** ⭐ (Sharpe 공동 1위) | Top-15 + Cap 15% | **1.84** | +34.9%p | -19.9% | 6.61 |
+| **균형 2위** ⭐ | Top-20 + Cap 20% | **1.84** | +33.6%p | -20.1% | **7.03** |
+| **알파 + 안정** | Top-15 + Cap 25% | 1.81 | +37.7%p | -20.8% | 6.45 |
+| **공격 (최대 알파)** | Top-10 + Cap 30% | 1.78 | **+45.2%p** | -22.6% | 5.62 |
+| **단순 (현재 default)** | Top-20 No cap | 1.79 | +34.6%p | -20.9% | 6.75 |
+
+**선택 가이드** (시드 무관, 결정 기준 = Sharpe > Alpha > t-stat > MDD):
+- Sharpe 1위 + 알파 평균 = **Top-15 Cap15%** 또는 **Top-20 Cap20%** (사실상 동일)
+- 알파 압도 + Sharpe 양호 = **Top-10 Cap30%** (변동 ↑)
+- 운용 단순성 = **Top-20 No cap** (현재 라이브)
 
 → `current_portfolio.py`에서 `TOP_N`, `SECTOR_CAP` 변수로 전환 가능.
 
@@ -121,12 +155,17 @@ stock_lab/
 │   ├── test_v4_bootstrap.py         # 30 runs robustness
 │   ├── test_sector_cap.py           # Sector cap (25-30% sweet)
 │   ├── test_sector_cap_decompose.py # 시기별 cap 효과 분해
-│   └── test_topn_cap_cross.py       # Top-N × Cap 매트릭스
+│   ├── test_topn_cap_cross.py       # Top-N × Cap 매트릭스 (v4 / 6-feature)
+│   ├── test_3feature_topn_cap_cross.py # Top-N × Cap 매트릭스 (v5 / 3-feature) ⭐
+│   └── test_weekly_walkforward.py   # Weekly walk-forward 2025-2026 ⭐
 │
 ├── results/                    # 검증 결과
 │   ├── current_portfolio.csv         # 최신 매수 추천
 │   ├── ml_sp500_walkforward.csv      # 31 windows
-│   ├── topn_cap_cross.txt            # Cross 매트릭스
+│   ├── topn_cap_cross.txt            # v4 cross 매트릭스
+│   ├── topn_cap_cross_3feature.txt   # v5 cross 매트릭스
+│   ├── weekly_walkforward.txt        # Weekly walk-forward 결과
+│   ├── weekly_walkforward.csv        # 주별 상세
 │   └── archive/                      # 옛 결과
 │
 └── reports/
@@ -165,9 +204,10 @@ TRAIN_YEARS  = 7           # 7이 sweet spot
 ### 3. 검증 재실행 (선택)
 
 ```bash
-PYTHONPATH=. python3 tests/test_ml_sp500.py        # 31 windows 알파
-PYTHONPATH=. python3 tests/test_v4_bootstrap.py    # robustness
-PYTHONPATH=. python3 tests/test_topn_cap_cross.py  # Top-N × Cap 매트릭스
+PYTHONPATH=. python3 tests/test_ml_sp500.py                    # 31 windows 알파
+PYTHONPATH=. python3 tests/test_v4_bootstrap.py                # robustness
+PYTHONPATH=. python3 tests/test_3feature_topn_cap_cross.py     # v5 Top-N × Cap 매트릭스
+PYTHONPATH=. python3 tests/test_weekly_walkforward.py          # 주간 walk-forward
 ```
 
 ## 운용 룰
@@ -204,23 +244,35 @@ PYTHONPATH=. python3 tests/test_topn_cap_cross.py  # Top-N × Cap 매트릭스
 
 ## 다음 단계 후보
 
-### Tier 1 — 즉시 가치 큼
-- 모멘텀 horizon 다양화 (1m, 3m, 6m, 12m)
-- 시장 regime feature (VIX level, SPY rolling stats)
-- Sector relative momentum
-- Ensemble (Ridge + LightGBM 평균)
-- Feature ablation (어느 feature가 진짜 알파인가)
+### Tier 1 — 즉시 가치 큼 (미검증)
+- **Sector relative momentum** — 섹터 내 상대 점수
+- **Ensemble** (Ridge + LightGBM 평균) — 두 모델 약점 보완
 
 ### Tier 2 — 큰 작업
-- OHLC 활용 (gap analysis, intraday vol)
-- Quality factor (ROE) — yfinance 부분 가능
-- Multi-horizon target (5+10+20일 평균)
+- **OHLC 활용** (gap analysis, intraday vol) — 분봉 데이터 활용
+- **Quality factor (ROE)** — yfinance 부분 가능
+- **Multi-horizon target** (5+10+20일 평균) — input 아닌 target 다양화
 
 ### Tier 3 — 사용자 개입 필요
-- Survivorship bias 해결 (Tiingo/Alpha Vantage API)
-- 한국 시장 추가 (pykrx)
-- 뉴스 sentiment (LLM)
-- Fundamentals (PER/ROE) 본격 — 유료 DB
+- **Survivorship bias 해결** (Tiingo/Alpha Vantage API)
+- **한국 시장 추가** (pykrx)
+- **뉴스 sentiment** (LLM)
+- **Fundamentals** (PER/ROE) 본격 — 유료 DB
+
+### 이미 검증 후 제외된 후보
+
+| 후보 | 결과 | 이유 |
+|---|---|---|
+| ❌ Multi-horizon momentum input (1m/3m/6m) | 알파 -1.3%p | RSI(14일)와 redundant + 최근 mega-cap 집중기에 음수 계수 |
+| ❌ Regime features (VIX, SPY vol, drawdown) | 알파 +0.04%p | Cross-sectional 모델은 모든 종목 같은 값 → 효과 없음 + Linear가 interaction 못 잡음 |
+| ✅ Feature ablation | **완료** | 6→3 features (lowvol+rsi+volsurge)로 압축 = v5 |
+| ❌ Stop-loss | 알파 -8%p | 회복기 놓침 |
+| ❌ Vol filter / Drawdown halt | 알파 -2~3%p | 시장 타이밍 손해 |
+| ❌ CASH 통합 | 효과 미미 | OOS에서 -5%p 이상 손해 |
+| ❌ HP tuning (LightGBM) | 효과 미미 | grid search 성과 제한 |
+| ❌ Ridge alpha tuning | 효과 미미 | alpha=1.0 default OK |
+
+→ 자세한 검증 출처: `tests/` 폴더 + `결과는 results/`
 
 ## 개발 일지
 
