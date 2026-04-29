@@ -2,7 +2,7 @@
 
 S&P 500 universe + Ridge ML 기반 quant 투자 모델.
 
-## 검증된 알파 (v5.2 — 3-feature minimum + 진단, 2026-04-29)
+## 검증된 알파 (v5 — 3-feature minimum + 진단)
 
 | 검증 | 결과 |
 |---|---|
@@ -18,7 +18,7 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 자세한 보고서: `reports/final_tuning_report.md`
 
-### Weekly Walk-Forward (v5 minimum, 2025-2026)
+### Weekly Walk-Forward (2025-2026)
 
 매주 월요일마다 직전 7년으로 Ridge 재학습 → Top-20 → 5거래일 보유. **OOS 시뮬레이션**.
 
@@ -44,7 +44,7 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 → 출처: `tests/test_weekly_walkforward.py` → `results/weekly_walkforward.txt`, `weekly_walkforward.csv`
 
-### Effective N 진단 (v5.2 추가)
+### Effective N 진단
 
 명목 Top-20 보유 시 실제 분산 효과 측정. Pairwise correlation 기반.
 
@@ -74,7 +74,7 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 → 출처: `tests/test_effective_n_yearly.py`, `test_effective_n_baseline.py`
 
-### ETF Buffer 검증 (v5.2 추가) — 진짜 분산은 다른 자산군
+### ETF Buffer 검증 — 진짜 분산은 다른 자산군
 
 **같은 자산군 (SPY) — 무가치**:
 | Buffer | Sharpe | Alpha | MDD |
@@ -175,7 +175,7 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 > **v4(6-feature) 대비 향상**: 모든 config가 Sharpe +0.05~0.16, alpha +1~2%p 개선. 3-feature가 압승.
 
-### 운용 옵션 — 2축 구조 (v5.2)
+### 운용 옵션 — 2축 구조
 
 **축 1: PROFILE (model 비중, 위험도 결정)**
 
@@ -388,12 +388,11 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 
 ## 개발 일지
 
-| 버전 | 환경 | 알파 | t-stat | Sharpe | 비고 |
-|---|---|---|---|---|---|
-| v1 | NASDAQ-100 + LightGBM 11 windows | +7.02%p (vs QQQ) | 1.68 | 1.19 | |
-| v2 | + 21 windows 확장 | +10.16%p | 3.25 | 1.27 | |
-| v3 | + S&P 500 universe | +18.63%p (vs SPY) | 5.69 | 1.35 | |
-| v4 | + Ridge + 7y + Weekly + Cap 옵션 | +31.03%p | 6.65 | 1.63 | 6-feature |
-| **v5** | **+ Feature ablation (3-feature minimum)** | **+34.16%p** | **6.63** | **1.77** | lowvol+rsi+volsurge |
-| **v5.1** | + Top-N × Cap cross 매트릭스 + Weekly walk-forward | (alpha 변화 없음) | | 매트릭스 best 1.84 | 운용 옵션 확장 |
-| **v5.2** | + Effective N 진단 + ETF buffer 검증 | (alpha 변화 없음) | | (default 1.79 유지) | 진단 완료 + buffer는 별도 성향 옵션 |
+> **버전 관리 규칙**: 메이저 정수만 표시 (rolling window: 현재 + 이전 1개). 소수점 minor 변경은 `CHANGELOG.md` 참조.
+
+| 버전 | 환경 | 알파 | t-stat | Sharpe |
+|---|---|---|---|---|
+| v4 | Ridge + 7y + Weekly + Cap 옵션 (6-feature) | +31.03%p | 6.65 | 1.63 |
+| **v5 (현재)** | **+ Feature ablation (3-feature) + 진단 + buffer 옵션** | **+34.16%p** | **6.63** | **1.77** |
+
+자세한 history (v1~v5.2): [CHANGELOG.md](CHANGELOG.md)
