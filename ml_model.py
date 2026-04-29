@@ -134,18 +134,32 @@ def build_features_panel(close, vol, include_multi_horizon=False):
 def get_train_test_features(close, vol, train_mask, test_mask, hp):
     """Build train/test long-format DataFrames.
 
-    Train: features + target on train_mask dates.
+    Train: features + target on train_mask dates (with target leakage buffer).
     Test:  features only (no target needed) on test_mask dates.
 
     If hp['include_multi_horizon'] is True, uses 9 features.
+
+    Target leakage 방지:
+      Train target = price[t + forward_days] / price[t] - 1
+      만약 t가 train 끝이면 t+forward_days가 test로 침범 → leakage.
+      따라서 train의 마지막 forward_days만큼 drop.
     """
     include_mh = hp.get('include_multi_horizon', False)
     feat_panels = build_features_panel(close, vol, include_multi_horizon=include_mh)
     target = make_target(close, hp['forward_days'], hp['target_type'])
 
+    # Buffer: train mask에서 마지막 forward_days만큼 drop
+    forward_days = hp['forward_days']
+    train_dates = close.index[train_mask]
+    if len(train_dates) > forward_days:
+        effective_train_end = train_dates[-forward_days]
+        train_mask_buffered = train_mask & (close.index < effective_train_end)
+    else:
+        train_mask_buffered = train_mask
+
     # Restrict each to its mask
-    train_feats = {n: df[train_mask] for n, df in feat_panels.items()}
-    train_target = target[train_mask]
+    train_feats = {n: df[train_mask_buffered] for n, df in feat_panels.items()}
+    train_target = target[train_mask_buffered]
 
     test_feats = {n: df[test_mask] for n, df in feat_panels.items()}
 

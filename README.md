@@ -2,16 +2,18 @@
 
 S&P 500 universe + Ridge ML 기반 quant 투자 모델.
 
-## 검증된 알파 (v5 — 3-feature minimum + 진단)
+## 검증된 알파 (v5 — 3-feature minimum + 진단 + leakage fix)
+
+> **2026-04-29 정정**: Target leakage 수정 후 모든 alpha 수치 ~1.7%p 하향. 상대 비교는 유효.
 
 | 검증 | 결과 |
 |---|---|
 | **Walk-forward** | 31 windows (1995-2025) |
-| **Avg CAGR** | **+46.82%** (Sharpe **1.77**) |
-| **vs SPY alpha** | **+34.16%p** (t=6.63) |
-| **승률** | 28/31 (90%) |
-| **Bootstrap** | 30 runs, mean alpha **+29.81%p** (모두 양수, std 1.72%p) |
-| **진짜 알파 추정** (보수) | **+20~25%p** (Bootstrap + survivorship 차감) |
+| **Avg CAGR** | **+45.51%** (Sharpe **1.74**) |
+| **vs SPY alpha** | **+32.85%p** (t=6.52) |
+| **승률** | 27/31 (87%) |
+| **Bootstrap** | 30 runs, mean alpha **+29.81%p** (leakage 영향 ~28%p 추정) |
+| **진짜 알파 추정** (보수) | **+18~23%p** (Bootstrap + survivorship 13% 차감) |
 
 **핵심 발견**: 6 features → 3 features로 줄였더니 알파 ↑ (+31% → +34%p).
 Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
@@ -431,6 +433,8 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | 버전 | 환경 | 알파 | t-stat | Sharpe |
 |---|---|---|---|---|
 | v4 | Ridge + 7y + Weekly + Cap 옵션 (6-feature) | +31.03%p | 6.65 | 1.63 |
-| **v5 (현재)** | **+ Feature ablation (3-feature) + 진단 + buffer 옵션** | **+34.16%p** | **6.63** | **1.77** |
+| **v5 (현재)** | **+ Feature ablation + Hysteresis + Leakage fix** | **+32.85%p** | **6.52** | **1.74** |
 
-자세한 history (v1~v5.2): [CHANGELOG.md](CHANGELOG.md)
+> v5는 **leakage 수정 반영**된 정정 수치. 이전 +34.16%p는 train target buffer 부재로 ~1.7%p 부풀림.
+
+자세한 history (v1~v5.4): [CHANGELOG.md](CHANGELOG.md)

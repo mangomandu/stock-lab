@@ -8,8 +8,21 @@
 
 **Base**: 3-feature minimum (lowvol + rsi + volsurge) + Ridge α=1.0 + 7y train + Weekly + S&P 500 universe.
 
-검증 알파: +34.16%p (Sharpe 1.77, t=6.63) — 31 windows 1995-2025.
-**+ Hysteresis exit_50 적용 시: alpha +37.28%p (Sharpe 1.80, turnover -37%)**
+검증 알파 (leakage fix 후): **+32.85%p** (Sharpe 1.74, t=6.52) — 31 windows 1995-2025.
+**+ Hysteresis exit_50 적용 시: alpha ~+35.5%p 추정** (이전 +37.28에서 leakage 차감 ~1.7%p).
+
+### v5.4 (2026-04-29 저녁) — Target leakage 수정
+- **버그 발견**: train target = 10일 forward 수익률 → train 마지막 10일의 target이 test 기간 가격 사용 → 누설
+- **수정**: `ml_model.get_train_test_features`에서 train mask 마지막 forward_days(10일) buffer 적용
+- **재검증 결과** (v5 baseline):
+  - Alpha 34.56 → **32.85%p** (Δ -1.71%p, 5% 부풀림 발견)
+  - Sharpe 1.79 → **1.74**
+  - Win rate 28/31 → 27/31
+  - t-stat 6.75 → 6.52 (여전히 매우 강함)
+- **다른 테스트 영향**: 모든 config 동등하게 ~1.7%p 하향. 상대 비교 (Top-N×Cap, Hysteresis 등) 유효성 보존.
+- 이전 보고된 모든 alpha 수치는 leakage 부풀림 포함 → README 정정
+
+### v5.3 (2026-04-29 오후 늦게) — Hysteresis 채택 + 곡선 확정
 
 ### v5.3 (2026-04-29 오후 늦게) — Hysteresis 채택 + 곡선 확정
 - **Hysteresis 검증** (1차 — exit_n ∈ {20, 25, 30, 40, 50}, 2차 — {45, 50, 55, 60, 65, 75}):
