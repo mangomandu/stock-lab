@@ -1,0 +1,43 @@
+[2026-04-29 13:46:42.076766] Effective N diagnostic on v5 weekly walk-forward
+  Features: ['lowvol', 'rsi', 'volsurge'] | Top-20 | corr lookback 60d
+====================================================================================================
+
+Total weeks: 70
+
+  Week  1 (2025-01-02): corr +0.14 | EffN 5.6 | sectors 8 (eff 3.9) | top sec: Technology (45%) | top3: ['SMCI', 'COIN', 'CVNA']
+  Week  2 (2025-01-06): corr +0.12 | EffN 6.2 | sectors 9 (eff 5.3) | top sec: Technology (35%) | top3: ['SMCI', 'CVNA', 'COIN']
+  Week  3 (2025-01-13): corr +0.16 | EffN 5.0 | sectors 7 (eff 3.3) | top sec: Technology (50%) | top3: ['SMCI', 'COIN', 'CVNA']
+  Week 10 (2025-03-03): corr +0.39 | EffN 2.4 | sectors 7 (eff 3.4) | top sec: Technology (50%) | top3: ['SMCI', 'COIN', 'VST']
+  Week 20 (2025-05-12): corr +0.39 | EffN 2.4 | sectors 9 (eff 5.4) | top sec: Technology (35%) | top3: ['VXX', 'SMCI', 'COIN']
+  Week 30 (2025-07-21): corr +0.20 | EffN 4.2 | sectors 8 (eff 6.1) | top sec: Technology (30%) | top3: ['SMCI', 'VXX', 'APP']
+  Week 40 (2025-09-29): corr +0.10 | EffN 7.1 | sectors 8 (eff 5.7) | top sec: Technology (30%) | top3: ['SATS', 'SMCI', 'APP']
+  Week 50 (2025-12-08): corr +0.22 | EffN 3.9 | sectors 8 (eff 4.3) | top sec: Technology (40%) | top3: ['SATS', 'SMCI', 'VXX']
+  Week 60 (2026-02-17): corr +0.19 | EffN 4.4 | sectors 7 (eff 4.3) | top sec: Technology (40%) | top3: ['SATS', 'SNDK', 'APP']
+  Week 70 (2026-04-27): corr +0.15 | EffN 5.2 | sectors 6 (eff 3.4) | top sec: Technology (45%) | top3: ['SATS', 'SNDK', 'LITE']
+
+====================================================================================================
+## Aggregate (70 weeks)
+  Average pairwise correlation:    +0.223
+  Average Effective N:             4.39
+  Median Effective N:              4.37
+  Min Eff N:                       1.79 (2025-04-21)
+  Max Eff N:                       7.84 (2025-01-21)
+
+  Average # distinct sectors:      7.9
+  Average effective sectors:       4.92
+  Average top-sector share:        36.9%
+  Max top-sector share:            60.0%
+
+## Effective N distribution
+  P10: 2.29
+  P25: 3.21
+  P50: 4.37
+  P75: 5.38
+  P90: 6.59
+
+## Top sector frequency (which sector dominates)
+  Technology                 69/70 (98.6%)
+  Consumer Cyclical           1/70 (1.4%)
+
+## Diagnosis
+  ❌ 심각한 몰빵 (Eff N 4.4, corr 0.22) — factor cap / ETF buffer 필요

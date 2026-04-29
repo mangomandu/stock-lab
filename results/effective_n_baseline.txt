@@ -1,0 +1,47 @@
+[2026-04-29 13:54:46.233893] Effective N — baseline comparison
+  Years: 2015-2025 (11 years) | Top-20
+  A. Ridge model | B. Random Top-20 (avg of 10) | C. Full universe
+====================================================================================================
+  Year 2015: rebals  51 | Model corr +0.24 EffN 3.8 | Random corr +0.37 EffN 2.6 | Full corr +0.37 EffN 2.8
+  Year 2016: rebals  51 | Model corr +0.29 EffN 3.2 | Random corr +0.32 EffN 3.0 | Full corr +0.32 EffN 3.3
+  Year 2017: rebals  51 | Model corr +0.15 EffN 5.3 | Random corr +0.15 EffN 5.5 | Full corr +0.15 EffN 7.1
+  Year 2018: rebals  51 | Model corr +0.23 EffN 4.0 | Random corr +0.26 EffN 4.0 | Full corr +0.26 EffN 4.8
+  Year 2019: rebals  51 | Model corr +0.22 EffN 4.2 | Random corr +0.30 EffN 3.3 | Full corr +0.30 EffN 3.7
+  Year 2020: rebals  51 | Model corr +0.35 EffN 3.2 | Random corr +0.40 EffN 2.9 | Full corr +0.40 EffN 3.2
+  Year 2021: rebals  51 | Model corr +0.25 EffN 3.6 | Random corr +0.24 EffN 3.7 | Full corr +0.24 EffN 4.2
+  Year 2022: rebals  51 | Model corr +0.40 EffN 2.5 | Random corr +0.40 EffN 2.4 | Full corr +0.41 EffN 2.6
+  Year 2023: rebals  50 | Model corr +0.26 EffN 3.8 | Random corr +0.29 EffN 3.3 | Full corr +0.28 EffN 3.8
+  Year 2024: rebals  51 | Model corr +0.18 EffN 4.9 | Random corr +0.20 EffN 4.3 | Full corr +0.20 EffN 5.1
+  Year 2025: rebals  50 | Model corr +0.24 EffN 4.3 | Random corr +0.25 EffN 4.0 | Full corr +0.26 EffN 4.6
+
+====================================================================================================
+## Aggregate (559 rebal events, 2015-2025)
+
+Group                       Avg corr   Avg EffN   Median EffN
+-----------------------------------------------------------------
+A. Our Ridge model           +0.256       3.89          3.69
+B. Random Top-20             +0.289       3.54          3.29
+C. Full universe             +0.289       4.09          3.61
+
+## Model vs Random (positive = we are MORE concentrated)
+  Δ corr:  -0.033
+  Δ EffN:  +0.35
+  Win rate (model > random EffN): 362/559 (64.8%)
+
+## Stress periods (top 10% corr_full = market under stress)
+  Stress threshold: corr_full >= 0.46
+  N events: 56
+  Stress avg EffN — Model:  2.27
+  Stress avg EffN — Random: 1.87
+  Stress avg EffN — Full:   1.92
+
+## Calm periods (bottom 10% corr_full)
+  Calm threshold: corr_full <= 0.16
+  N events: 56
+  Calm avg EffN — Model:  5.78
+  Calm avg EffN — Random: 6.06
+  Calm avg EffN — Full:   8.00
+
+## Diagnosis
+  ✅ 랜덤 baseline 수준 (EffN diff +0.4)
+     → 우리 모델 특유 몰빵 X. 시장 자체 corr 한계 — 폭락장은 어차피 다 떨어짐

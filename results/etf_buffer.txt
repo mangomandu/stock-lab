@@ -1,0 +1,40 @@
+[2026-04-29 13:52:59.049598] ETF buffer test: model + SPY blend
+  Features: ['lowvol', 'rsi', 'volsurge'] | Top-20 | 31 windows
+====================================================================================================
+
+[Model100% + SPY0%] running...
+  CAGR +47.22% Sh 1.79 MDD -20.88% | vs SPY +34.56%p | win 28/31 | t=6.75
+
+[Model90% + SPY10%] running...
+  CAGR +43.31% Sh 1.76 MDD -20.06% | vs SPY +30.65%p | win 28/31 | t=6.86
+
+[Model80% + SPY20%] running...
+  CAGR +39.52% Sh 1.72 MDD -19.27% | vs SPY +26.86%p | win 28/31 | t=6.97
+
+[Model70% + SPY30%] running...
+  CAGR +35.82% Sh 1.67 MDD -18.51% | vs SPY +23.17%p | win 28/31 | t=7.08
+
+[Model60% + SPY40%] running...
+  CAGR +32.23% Sh 1.61 MDD -17.78% | vs SPY +19.57%p | win 29/31 | t=7.18
+
+[Model50% + SPY50%] running...
+  CAGR +28.74% Sh 1.55 MDD -17.08% | vs SPY +16.08%p | win 29/31 | t=7.28
+
+====================================================================================================
+## Summary table
+Buffer           CAGR  Sharpe      MDD    vs SPY      Win      t
+----------------------------------------------------------------------
+Model100% + SPY0%          +47.22%    1.79  -20.88%   +34.56%p  28/31    6.75
+Model90% + SPY10%          +43.31%    1.76  -20.06%   +30.65%p  28/31    6.86
+Model80% + SPY20%          +39.52%    1.72  -19.27%   +26.86%p  28/31    6.97
+Model70% + SPY30%          +35.82%    1.67  -18.51%   +23.17%p  28/31    7.08
+Model60% + SPY40%          +32.23%    1.61  -17.78%   +19.57%p  29/31    7.18
+Model50% + SPY50%          +28.74%    1.55  -17.08%   +16.08%p  29/31    7.28
+
+## Best by metric
+  Sharpe 1위:  Model100% + SPY0% (Sh 1.79)
+  Alpha 1위:   Model100% + SPY0% (Alpha +34.56%p)
+  MDD 1위:     Model50% + SPY50% (MDD -17.08%)
+
+## Diagnosis
+  100% model이 Sharpe 1위 — buffer 효과 없음. 현재 default 유지.
