@@ -34,6 +34,8 @@ PROFILE      = 'standard'   # 'standard' (100% model) / 'low_risk' (60% model + 
 # [2] Parameters — 같은 model 내 변형 (개별 조정 가능)
 TOP_N        = 20           # 10 / 15 / 20 (검증된 매트릭스 README 참조)
 SECTOR_CAP   = None         # None / 0.15 / 0.20 / 0.25 / 0.30
+HYST_EXIT    = 50           # exit_n: TOP_N=20 + exit_n=50 → 50등 밖되면 매도 (회전율 ↓ + alpha ↑)
+                            # 옵션: 20 (no hyst), 25, 30, 40, 50 (best)
 
 # [3] Common
 SEED_USD     = 400          # your seed in USD
@@ -71,22 +73,38 @@ def load_sectors():
     return df['Sector'].to_dict()
 
 
-def topn_with_sector_cap(score_series, sectors, top_n, sector_cap):
-    """Greedy: take highest scored, skip if sector cap violated."""
+def topn_with_sector_cap(score_series, sectors, top_n, sector_cap, prev_held=None, hyst_exit=None):
+    """Greedy: take highest scored, skip if sector cap violated.
+
+    Hysteresis: prev_held 종목이 hyst_exit등 안에 있으면 우선 유지 (회전율 ↓).
+    """
     sorted_scores = score_series.dropna().sort_values(ascending=False)
+    ranks = {ticker: i for i, ticker in enumerate(sorted_scores.index, 1)}
     held = []
     sector_count = defaultdict(int)
-    if sector_cap is None:
-        return sorted_scores.head(top_n).index.tolist()
-    max_per_sector = max(1, int(top_n * sector_cap))
+    max_per_sector = max(1, int(top_n * sector_cap)) if sector_cap else top_n
+
+    # Hysteresis: keep prev_held if still ranked within hyst_exit
+    if prev_held and hyst_exit and hyst_exit > top_n:
+        for h in prev_held:
+            if h in ranks and ranks[h] <= hyst_exit and len(held) < top_n:
+                sec = sectors.get(h, 'Unknown') if sectors else 'Unknown'
+                if sector_cap is None or sector_count[sec] < max_per_sector:
+                    held.append(h)
+                    sector_count[sec] += 1
+
+    # Fill up with new top entries
     for ticker in sorted_scores.index:
         if len(held) >= top_n:
             break
+        if ticker in held:
+            continue
         sec = sectors.get(ticker, 'Unknown') if sectors else 'Unknown'
-        if sector_count[sec] >= max_per_sector:
+        if sector_cap and sector_count[sec] >= max_per_sector:
             continue
         held.append(ticker)
         sector_count[sec] += 1
+
     return held
 
 
@@ -104,9 +122,20 @@ def main():
     print("=" * 80)
 
     close, vol = core.load_panel(master_dir=DATA_DIR)
-    sectors = load_sectors() if SECTOR_CAP else None
+    sectors = load_sectors()
     hp = dict(ml_model.ML_HP_DEFAULT)
     hp['feature_names'] = feat_list
+
+    # Load previous portfolio for hysteresis (if exists)
+    prev_held = []
+    prev_csv = os.path.join(OUTPUT_DIR, 'current_portfolio.csv')
+    if HYST_EXIT > TOP_N and os.path.exists(prev_csv):
+        try:
+            prev_df = pd.read_csv(prev_csv)
+            prev_held = [t for t in prev_df['ticker'].tolist() if t != 'TLT']
+            print(f"  Hysteresis: prev portfolio loaded ({len(prev_held)} stocks), exit_n={HYST_EXIT}")
+        except Exception as e:
+            print(f"  Hysteresis: prev portfolio load failed ({e}), 처음 실행 또는 fresh start")
 
     latest_date = close.index.max()
     train_start = latest_date - pd.DateOffset(years=TRAIN_YEARS)
@@ -148,8 +177,14 @@ def main():
     score_long['score'] = preds
     score_series = score_long.set_index('ticker')['score']
 
-    # Apply Top-N + sector cap
-    held_tickers = topn_with_sector_cap(score_series, sectors, TOP_N, SECTOR_CAP)
+    # Apply Top-N + sector cap + hysteresis
+    held_tickers = topn_with_sector_cap(score_series, sectors, TOP_N, SECTOR_CAP,
+                                          prev_held=prev_held, hyst_exit=HYST_EXIT)
+    if prev_held:
+        new_buys = [t for t in held_tickers if t not in prev_held]
+        sells = [t for t in prev_held if t not in held_tickers]
+        print(f"\n  Changes from prev: +{len(new_buys)} buys ({new_buys[:5]}{'...' if len(new_buys)>5 else ''}), "
+              f"-{len(sells)} sells ({sells[:5]}{'...' if len(sells)>5 else ''})")
 
     latest_close = close_sub.loc[latest_date]
     # Allocate model portion of seed (1 - TLT_BUFFER) to Top-N stocks equally

@@ -119,6 +119,23 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 → 출처: `tests/test_etf_buffer.py`, `test_tlt_gld_buffer.py`
 
+### Hysteresis (회전율 ↓ + alpha ↑)
+
+**아이디어**: Top-N 새 진입은 N등 이내, 기존 보유는 exit_n 등 안에 있으면 holding 유지.
+
+| exit_n | CAGR | Sharpe | Alpha | Turnover/day |
+|---|---|---|---|---|
+| 20 (no hyst, baseline) | +47.22% | 1.79 | +34.6%p | 10.82% |
+| 30 | +48.65% | 1.79 | +35.99%p | 8.80% |
+| 40 | +48.24% | 1.79 | +35.59%p | 7.62% |
+| **50** ⭐ | **+49.94%** | **1.80** | **+37.28%p** | **6.74%** |
+
+→ exit_50: alpha **+2.72%p**, turnover **-37%** 동시 달성. **공짜 점심**.
+
+> **메커니즘**: 매주 Top-20 강제 회전이 비용 누적 → 대신 30~50등 약간 떨어진 종목 유지하면 비용 ↓ + 변동성 ↓ + alpha ↑.
+
+→ 출처: `tests/test_hysteresis.py`
+
 ## 핵심 설정 (v5 best)
 
 | 항목 | 값 | 검증 |
@@ -131,6 +148,7 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 | Rebalance | **Weekly** (5 trading days) | ✅ Best (Daily/Weekly/Biweekly/Monthly 비교) |
 | Top-N | **15 또는 20** | ✅ Top-15 Cap15% / Top-20 Cap20% Sharpe 1.84 동률 |
 | Sector cap | **15-20%** (균형) 또는 30% (공격) | ✅ 매트릭스 검증 완료 |
+| **Hysteresis exit_n** | **50** (best, alpha +2.72%p, turnover -37%) | ✅ exit_50이 sweet |
 | Cost | 0.10% round-trip | 검증 가정 |
 
 ### Feature Set 비교
@@ -332,6 +350,7 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | ✅ Ridge (vs LightGBM/XGBoost) | 알파 +4%p |
 | ✅ Sector cap 25-30% | Sharpe ↑ 0.05, 알파 변화 없음 |
 | ✅ **Feature ablation: 3 features이 6 features 압승** | Sharpe +0.14, 알파 +3%p |
+| ✅ **Hysteresis exit_50** | 알파 **+2.72%p**, turnover -37% (공짜 점심) |
 | ⚠ **TLT/GLD buffer**: Sharpe ↑, alpha ↓ 트레이드오프 | 안정형 옵션. 장기 부 증식엔 부적합 (CAGR/alpha 큰 손실) |
 | ✅ **Effective N 진단**: 우리 모델 baseline 이상 | 추가 cap 작업 불필요 확정 |
 | ❌ Multi-horizon momentum (1m/3m/6m) | 알파 -1.3%p (redundant + recent regime) |
@@ -352,14 +371,12 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 
 ## 다음 단계 후보
 
-### Tier 1 — 즉시 가치 큼 (미검증)
-- **Sector relative momentum** — 섹터 내 상대 점수
-- **Ensemble** (Ridge + LightGBM 평균) — 두 모델 약점 보완
+### Tier 1 — 미검증
+- **Multi-horizon target** (5+10+20일 평균) — input 아닌 target 다양화 (~30분)
 
 ### Tier 2 — 큰 작업
 - **OHLC 활용** (gap analysis, intraday vol) — 분봉 데이터 활용
 - **Quality factor (ROE)** — yfinance 부분 가능
-- **Multi-horizon target** (5+10+20일 평균) — input 아닌 target 다양화
 
 ### Tier 3 — 사용자 개입 필요
 - **Survivorship bias 해결** (Tiingo/Alpha Vantage API)
@@ -376,8 +393,11 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | ✅ Feature ablation | **완료** | 6→3 features (lowvol+rsi+volsurge)로 압축 = v5 |
 | ✅ Top-N × Cap cross | **완료** | Top-15 Cap15% / Top-20 Cap20% Sharpe 1.84 동률 |
 | ✅ Effective N 진단 + baseline 비교 | **완료** | 우리 모델 baseline 이상, factor cap 추가 불필요 |
+| ✅ **Hysteresis** | **채택** (exit_50) | 알파 +2.72%p, turnover -37% |
 | ⚠ ETF buffer (TLT/GLD) | **트레이드오프 확인** | Sharpe 미세 ↑이지만 alpha -18%p. 장기 부 증식엔 부적합 |
 | ❌ ETF buffer (SPY) | 모든 비율 손해 | 같은 자산군 (미국 주식) → 분산 효과 X |
+| ❌ **Sector-relative score** | 알파 -4.5%p | Sharpe 1.85 ↑이지만 절대 알파 큰 손해 |
+| ❌ **Ensemble (Ridge + LightGBM)** | 알파 -7%p | 3-feature에선 LGBM 약함 (Sharpe 1.43), 평균해도 Ridge 단독보다 ↓ |
 | ❌ Stop-loss | 알파 -8%p | 회복기 놓침 |
 | ❌ Vol filter / Drawdown halt | 알파 -2~3%p | 시장 타이밍 손해 |
 | ❌ CASH 통합 | 효과 미미 | OOS에서 -5%p 이상 손해 |

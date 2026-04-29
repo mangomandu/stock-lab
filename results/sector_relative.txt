@@ -1,0 +1,19 @@
+[2026-04-29 15:07:53.675744] Sector-relative score test
+  v5.2 baseline vs sector-mean-subtracted score | 31 windows
+====================================================================================================
+
+[Baseline (raw)] running...
+  CAGR +47.22% Sh 1.79 MDD -20.88% | vs SPY +34.56%p | win 28/31 | t=6.75
+
+[Sector-relative] running...
+  CAGR +42.68% Sh 1.85 MDD -18.31% | vs SPY +30.02%p | win 28/31 | t=7.73
+
+====================================================================================================
+## Summary
+Config                        CAGR  Sharpe      MDD     Alpha      t
+---------------------------------------------------------------------------
+Baseline (raw)             +47.22%    1.79  -20.88%   +34.56%p   6.75
+Sector-relative            +42.68%    1.85  -18.31%   +30.02%p   7.73
+
+## Diagnosis
+  ❌ Sector-relative 손해. Δalpha -4.54%p
