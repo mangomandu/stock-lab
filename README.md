@@ -385,13 +385,30 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 
 ## 알려진 한계
 
-- **Survivorship bias** 미해결 (S&P 500만 보유 → API 가입 시 가능)
+### 데이터/시장
+- **Survivorship bias** 미해결 (S&P 500만 보유 → API 가입 시 가능, ~13% 부풀림)
 - **비용 0.20% 이상**이면 알파 사라짐 → 미국 무수수료 broker 또는 토스증권 (외화통장) 필수
 - **2024-2025 mega-cap 집중기** 알파 약함 (회복은 자연스러움)
 
+### 검증 방법론 한계 (정직 공개)
+- **모델 학습 빈도 mismatch**: 31 windows 검증은 **연 1회 학습**, 라이브는 **매주 학습**.
+  - 영향 미미 추정 (train data 7년 중 매주 추가량 0.28%)
+  - But 시기별 regime shift 시 weekly가 더 빨리 적응 가능
+  - 진짜 weekly walk-forward 검증 미수행 (시간 비용 25시간+)
+- **HP lookahead (약함)**: TOP_N, TRAIN_YEARS, Ridge α 등 모두 31 windows 결과 보고 선택.
+  - Nested CV (시기별 HP 재선택) 미수행
+  - t-stat 6.52는 약간 부풀림 가능 (효과적 t ≈ 4-5 추정)
+- **Window overlap**: 7년 train 윈도우 인접 윈도우 사이 6년 겹침 → 효과적 독립 표본 < 31
+- **HP 갱신 정책 미정**: 라이브에서 시기별 HP 재검증 주기 (1년? 5년?) 미결정. 현재는 무한 고정.
+
 ## 다음 단계 후보
 
-### Tier 1 — 미검증
+### Tier 0 — 검증 방법론 강화
+- **Weekly 31년 walk-forward** — 매주 모델 재학습. 학습 빈도 mismatch 해소 (시간 25h+)
+- **Nested CV (HP rolling)** — 시기별 HP 재선택. 약한 lookahead 제거
+- **HP 갱신 정책 검증** — 1년/5년 주기로 HP 재검증 시뮬레이션
+
+### Tier 1 — 미검증 (모델 개선)
 - **Multi-horizon target** (5+10+20일 평균) — input 아닌 target 다양화 (~30분)
 
 ### Tier 2 — 큰 작업
