@@ -121,20 +121,38 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 ### Hysteresis (회전율 ↓ + alpha ↑)
 
-**아이디어**: Top-N 새 진입은 N등 이내, 기존 보유는 exit_n 등 안에 있으면 holding 유지.
+**아이디어**: Top-N 새 진입은 N등 이내, 기존 보유는 exit_n 등 안에 있으면 holding 유지. "진입 까다롭게, 퇴장 너그럽게".
 
-| exit_n | CAGR | Sharpe | Alpha | Turnover/day |
-|---|---|---|---|---|
-| 20 (no hyst, baseline) | +47.22% | 1.79 | +34.6%p | 10.82% |
-| 30 | +48.65% | 1.79 | +35.99%p | 8.80% |
-| 40 | +48.24% | 1.79 | +35.59%p | 7.62% |
-| **50** ⭐ | **+49.94%** | **1.80** | **+37.28%p** | **6.74%** |
+**Full curve** (Top-20, 31 windows):
+| exit_n | Alpha | Sharpe | Turnover/day |
+|---|---|---|---|
+| 20 (no hyst, baseline) | +34.6%p | 1.79 | 10.82% |
+| 25 | +34.07%p | 1.76 | 9.63% |
+| 30 | +35.99%p | 1.79 | 8.80% |
+| 40 | +35.59%p | 1.79 | 7.62% |
+| 45 | +36.91%p | **1.81** ⭐ | 7.14% |
+| **50** ⭐ (default) | **+37.28%p** ⭐ | 1.80 | 6.74% |
+| 55 | +36.61%p | 1.80 | 6.40% |
+| 60 | +36.20%p | 1.79 | 6.08% |
+| 65 | +34.82%p | 1.76 ↓ | 5.78% |
+| 75 | +35.59%p | 1.77 | 5.31% |
 
-→ exit_50: alpha **+2.72%p**, turnover **-37%** 동시 달성. **공짜 점심**.
+→ **Sweet spot: exit_45~55**. 우리 default = exit_50 (alpha peak).
+→ 65 이상은 신호 무시 시작 → alpha degradation.
 
-> **메커니즘**: 매주 Top-20 강제 회전이 비용 누적 → 대신 30~50등 약간 떨어진 종목 유지하면 비용 ↓ + 변동성 ↓ + alpha ↑.
+**효과 (exit_50 기준)**:
+- Alpha **+2.72%p** (34.56 → 37.28)
+- Turnover **-37%** (10.82% → 6.74%/day)
+- 동시 달성 = **공짜 점심**
 
-→ 출처: `tests/test_hysteresis.py`
+> **메커니즘**: 매주 Top-20 강제 회전이 비용 + 변동성만 늘림. 대신 30~50등 약간 떨어진 종목 holding 유지하면:
+> - **비용 ↓** (불필요한 매매 줄임)
+> - **알파 ↑** (가짜 sell signal 무시, 진짜 신호만 반영)
+> - **자본 집중** (Top-50 분산 X, 항상 Top-20 conviction 유지)
+
+> **Top-N 늘리기 vs Hysteresis**: Top-50 (no hyst)도 turnover 낮지만 종목당 비중 1/50=2%로 신호 희석 → alpha ↓. Hysteresis는 Top-20 비중 1/20=5%를 유지해 자본 집중.
+
+→ 출처: `tests/test_hysteresis.py`, `test_hysteresis_deep.py`
 
 ## 핵심 설정 (v5 best)
 
