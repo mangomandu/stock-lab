@@ -86,15 +86,20 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 → SPY는 우리 universe와 **같은 미국 주식** → 분산 효과 X. 모든 비율에서 Sharpe ↓, alpha ↓.
 
-**다른 자산군 (TLT 장기채) — 진짜 분산** ⭐:
-| Buffer | Sharpe | Alpha | MDD |
-|---|---|---|---|
-| 100% model | 1.79 | +34.6%p | -20.9% |
-| 80% + TLT 20% | 1.85 | +25.3%p | -16.7% |
-| 70% + TLT 30% | 1.88 | +20.8%p | -14.6% |
-| **60% + TLT 40%** ⭐ | **1.91** | +16.4%p | **-12.7%** |
+**다른 자산군 (TLT 장기채) — Sharpe ↑, 알파 ↓ 트레이드오프**:
+| Buffer | CAGR | Sharpe | Alpha | MDD |
+|---|---|---|---|---|
+| **100% model (default)** | **+47.2%** | 1.79 | **+34.6%p** | -20.9% |
+| 80% + TLT 20% | +38.0% | 1.85 | +25.3%p | -16.7% |
+| 70% + TLT 30% | +33.5% | 1.88 | +20.8%p | -14.6% |
+| 60% + TLT 40% | +29.0% | **1.91** | +16.4%p | **-12.7%** |
 
-→ Sharpe **+0.12**, MDD **+8.2%p 개선** (절반 가까이 줄어듦). 알파 손실 -18%p.
+→ Sharpe **+0.12 개선** = "위험 대비 수익률"만 살짝 ↑. 다만:
+- **CAGR -18%p 손해** (47% → 29%, 복리로 큰 손실)
+- **Alpha -18.2%p 손해** (34.6 → 16.4, 시장 대비 초과수익 반토막)
+- MDD -8.2%p 개선 (변동성 절반)
+
+**핵심**: Sharpe 올라가는 건 **변동성이 더 빨리 줄어서**지 알파가 늘어서가 아님. 절대 부의 증가는 100% model이 압도.
 
 **또 다른 자산군 (GLD 금) — 비슷한 효과**:
 | Buffer | Sharpe | Alpha | MDD |
@@ -106,9 +111,10 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 → TLT와 비슷 (약간 낮음). 인플레 대비 헤지로 가치.
 
 **결론**:
-- 같은 자산군 buffer (SPY) = **무가치** ❌
-- 다른 자산군 buffer (TLT/GLD) = **안정형 사용자에게 매력적** ⭐ (Sharpe ↑, MDD 절반)
-- 알파 추구 = 100% model 유지
+- 같은 자산군 buffer (SPY) = **무가치** ❌ (모든 비율 Sharpe ↓ alpha ↓)
+- 다른 자산군 buffer (TLT/GLD) = **알파-안정 트레이드오프** (Sharpe 미세 ↑, 알파 큰 손해)
+- **장기 자산 증식 = 100% model 유지가 정답** (복리로 알파 차이 어마무시)
+- TLT/GLD buffer는 "MDD 못 견디는 사용자"용 별도 옵션 (예: 노후자금)
 - 시드 작을 땐 buffer 사치 (수수료/소수점 매매 한계)
 
 → 출처: `tests/test_etf_buffer.py`, `test_tlt_gld_buffer.py`
@@ -180,13 +186,14 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 | **공격 (최대 알파)** | Top-10 + Cap 30% | 1.78 | **+45.2%p** | -22.6% | 5.62 |
 | **단순 (현재 default)** | Top-20 No cap | 1.79 | +34.6%p | -20.9% | 6.75 |
 
-**선택 가이드** (시드 무관, 결정 기준 = Sharpe > Alpha > t-stat > MDD):
+**선택 가이드** (시드 무관, 결정 기준 = **Alpha** + Sharpe + t-stat):
+- 운용 단순성 = **Top-20 No cap** (현재 라이브) ⭐
 - Sharpe 1위 + 알파 평균 = **Top-15 Cap15%** 또는 **Top-20 Cap20%** (사실상 동일)
 - 알파 압도 + Sharpe 양호 = **Top-10 Cap30%** (변동 ↑)
-- 운용 단순성 = **Top-20 No cap** (현재 라이브)
-- **Sharpe 절대 1위 (안정형 시드)** = **60% model + 40% TLT** (Sharpe 1.91, MDD -12.7%, alpha +16.4%p)
 
-→ `current_portfolio.py`에서 `TOP_N`, `SECTOR_CAP` 변수로 전환 가능. TLT/GLD buffer는 운용자가 직접 비율 결정 후 매수.
+> **Note**: TLT/GLD buffer는 알파를 큰 폭 희생하므로 **장기 자산 증식 목적**엔 부적합. MDD 견디기 어려운 별도 성향 사용자용 옵션. (밑 ETF buffer 섹션 참조)
+
+→ `current_portfolio.py`에서 `TOP_N`, `SECTOR_CAP` 변수로 전환 가능.
 
 ## 폴더 구조
 
@@ -311,7 +318,7 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | ✅ Ridge (vs LightGBM/XGBoost) | 알파 +4%p |
 | ✅ Sector cap 25-30% | Sharpe ↑ 0.05, 알파 변화 없음 |
 | ✅ **Feature ablation: 3 features이 6 features 압승** | Sharpe +0.14, 알파 +3%p |
-| ✅ **TLT 40% buffer (안정형)** | Sharpe +0.12, MDD +8.2%p, alpha -18%p |
+| ⚠ **TLT/GLD buffer**: Sharpe ↑, alpha ↓ 트레이드오프 | 안정형 옵션. 장기 부 증식엔 부적합 (CAGR/alpha 큰 손실) |
 | ✅ **Effective N 진단**: 우리 모델 baseline 이상 | 추가 cap 작업 불필요 확정 |
 | ❌ Multi-horizon momentum (1m/3m/6m) | 알파 -1.3%p (redundant + recent regime) |
 | ❌ Regime features (VIX, drawdown) | 효과 거의 없음 (linear model 한계) |
@@ -355,7 +362,7 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | ✅ Feature ablation | **완료** | 6→3 features (lowvol+rsi+volsurge)로 압축 = v5 |
 | ✅ Top-N × Cap cross | **완료** | Top-15 Cap15% / Top-20 Cap20% Sharpe 1.84 동률 |
 | ✅ Effective N 진단 + baseline 비교 | **완료** | 우리 모델 baseline 이상, factor cap 추가 불필요 |
-| ✅ ETF buffer (TLT/GLD) | **완료** | TLT 40% Sharpe ↑ MDD 절반. 안정형 옵션으로 등록 |
+| ⚠ ETF buffer (TLT/GLD) | **트레이드오프 확인** | Sharpe 미세 ↑이지만 alpha -18%p. 장기 부 증식엔 부적합 |
 | ❌ ETF buffer (SPY) | 모든 비율 손해 | 같은 자산군 (미국 주식) → 분산 효과 X |
 | ❌ Stop-loss | 알파 -8%p | 회복기 놓침 |
 | ❌ Vol filter / Drawdown halt | 알파 -2~3%p | 시장 타이밍 손해 |
@@ -375,4 +382,4 @@ PYTHONPATH=. python3 tests/test_tlt_gld_buffer.py              # TLT/GLD buffer
 | v4 | + Ridge + 7y + Weekly + Cap 옵션 | +31.03%p | 6.65 | 1.63 | 6-feature |
 | **v5** | **+ Feature ablation (3-feature minimum)** | **+34.16%p** | **6.63** | **1.77** | lowvol+rsi+volsurge |
 | **v5.1** | + Top-N × Cap cross 매트릭스 + Weekly walk-forward | (alpha 변화 없음) | | 매트릭스 best 1.84 | 운용 옵션 확장 |
-| **v5.2** | + Effective N 진단 + ETF buffer 검증 | (alpha 변화 없음) | | 안정형: TLT 40% buffer 1.91 | 진단 + 안정형 옵션 |
+| **v5.2** | + Effective N 진단 + ETF buffer 검증 | (alpha 변화 없음) | | (default 1.79 유지) | 진단 완료 + buffer는 별도 성향 옵션 |
