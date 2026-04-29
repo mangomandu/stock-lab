@@ -1,21 +1,19 @@
 """
-Current portfolio recommendation — v5 (3-feature minimum model).
+Current portfolio recommendation — v5.2 (3-feature minimum model + risk profiles).
 
 Run weekly to get Top-N stocks for the week.
 
-Config (edit below):
-  - TOP_N: 10 / 15 / 20 (validated)
-  - SECTOR_CAP: None (no cap) or float (e.g. 0.25 = max 25% per sector)
-  - SEED_USD: your investment seed in USD
-  - FEATURES: 'minimum' (3-feat best) or 'full' (6-feat baseline)
+2 Profiles (model 비중):
+  - 'standard'   : 100% model         → 알파 추구, 현재 라이브
+  - 'low_risk'   : 60% model + 40% TLT → 안정 추구, MDD 절반
 
-Best validated config (S&P 500 + Ridge + 7y train + Weekly):
-  - Features 'minimum' (lowvol+rsi+volsurge):
-    + Top-N=20: vs SPY +34.2%p, Sharpe 1.77 ★ NEW BEST
-    + Bootstrap mean: +29.81%p (30 runs, all positive, 13% sample bias)
-  - Features 'full' (6 baseline): vs SPY +31%p, Sharpe 1.63
+같은 model 내 변형 (TOP_N + SECTOR_CAP) — 검증된 옵션:
+  - Top-20 No cap   (default, 단순)         Sharpe 1.79, alpha +34.6%p
+  - Top-15 Cap 20%  (Sharpe peak)            Sharpe 1.84, alpha +37.7%p
+  - Top-10 Cap 30%  (최대 알파)              Sharpe 1.78, alpha +45.2%p
+  - Top-20 Cap 15%  (낮은 MDD)               Sharpe 1.82, alpha +31.7%p, MDD -19.7%
 
-Validation: Bootstrap 30 runs all positive, t-stat 6.63.
+자세한 매트릭스 + 검증 결과 README 참조.
 """
 import core
 import ml_model
@@ -28,20 +26,38 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 
 # =============================================================================
-# CONFIG — edit these for your operation
+# CONFIG
 # =============================================================================
-SEED_USD     = 400         # your seed in USD
-TOP_N        = 20          # 10 / 15 / 20 (validated)
-SECTOR_CAP   = None        # None (no cap) or 0.20 / 0.25 / 0.30 / 0.50 etc.
-TRAIN_YEARS  = 7           # 7 is sweet spot (validated)
-FEATURES     = 'minimum'   # 'minimum' (3-feat best) or 'full' (6-feat)
+# [1] Profile — model 비중 (위험도)
+PROFILE      = 'standard'   # 'standard' (100% model) / 'low_risk' (60% model + 40% TLT)
+
+# [2] Parameters — 같은 model 내 변형 (개별 조정 가능)
+TOP_N        = 20           # 10 / 15 / 20 (검증된 매트릭스 README 참조)
+SECTOR_CAP   = None         # None / 0.15 / 0.20 / 0.25 / 0.30
+
+# [3] Common
+SEED_USD     = 400          # your seed in USD
+TRAIN_YEARS  = 7            # 7 is sweet spot (validated)
+FEATURES     = 'minimum'    # 'minimum' (3-feat v5 best) or 'full' (6-feat v4 baseline)
 # =============================================================================
+
+PROFILES = {
+    'standard': {'tlt_buffer': 0.0,
+                 'desc': '100% model (알파 추구, 라이브)'},
+    'low_risk': {'tlt_buffer': 0.40,
+                 'desc': '60% model + 40% TLT (안정 추구, MDD 절반)'},
+}
 
 FEATURE_SETS = {
     'minimum': ['lowvol', 'rsi', 'volsurge'],          # v5 best (Sharpe 1.77)
     'full':    ['momentum', 'lowvol', 'trend',          # v4 baseline
                 'rsi', 'ma', 'volsurge'],
 }
+
+# Resolve profile
+if PROFILE not in PROFILES:
+    raise ValueError(f"Unknown profile: {PROFILE}. Choose from {list(PROFILES.keys())}")
+TLT_BUFFER = PROFILES[PROFILE]['tlt_buffer']
 
 DATA_DIR = '/home/dlfnek/stock_lab/data/master_sp500'
 OUTPUT_DIR = '/home/dlfnek/stock_lab/results'
@@ -77,8 +93,14 @@ def topn_with_sector_cap(score_series, sectors, top_n, sector_cap):
 def main():
     cap_label = "No cap" if SECTOR_CAP is None else f"Cap {int(SECTOR_CAP*100)}%"
     feat_list = FEATURE_SETS[FEATURES]
-    print(f"[{datetime.now()}] ML Portfolio v5 — Ridge + 7y + Weekly")
+    profile_desc = PROFILES[PROFILE]['desc']
+    print(f"[{datetime.now()}] ML Portfolio v5.2 — Ridge + 7y + Weekly")
+    print(f"  Profile: {PROFILE} ({profile_desc})")
     print(f"  Seed: ${SEED_USD} | Top-{TOP_N} | {cap_label} | Features: {FEATURES} ({len(feat_list)})")
+    if TLT_BUFFER > 0:
+        model_usd = SEED_USD * (1 - TLT_BUFFER)
+        tlt_usd = SEED_USD * TLT_BUFFER
+        print(f"  Buffer: model ${model_usd:.0f} ({(1-TLT_BUFFER)*100:.0f}%) + TLT ${tlt_usd:.0f} ({TLT_BUFFER*100:.0f}%)")
     print("=" * 80)
 
     close, vol = core.load_panel(master_dir=DATA_DIR)
@@ -130,7 +152,10 @@ def main():
     held_tickers = topn_with_sector_cap(score_series, sectors, TOP_N, SECTOR_CAP)
 
     latest_close = close_sub.loc[latest_date]
-    per_stock = SEED_USD / TOP_N
+    # Allocate model portion of seed (1 - TLT_BUFFER) to Top-N stocks equally
+    model_seed = SEED_USD * (1 - TLT_BUFFER)
+    tlt_seed = SEED_USD * TLT_BUFFER
+    per_stock = model_seed / TOP_N
 
     rows = []
     for i, ticker in enumerate(held_tickers, 1):
@@ -156,7 +181,25 @@ def main():
               f"${r['price']:>8.2f} {r['shares']:>10.6f} ${r['target_usd']:>6.2f} "
               f"{r['sector']:<22}")
     print("-" * 90)
-    print(f"{'Total':<24} {'':<10} {'':<10} ${portfolio['target_usd'].sum():>7.2f}")
+    print(f"{'Model total':<24} {'':<10} {'':<10} ${portfolio['target_usd'].sum():>7.2f}")
+    if TLT_BUFFER > 0:
+        # Compute TLT shares
+        tlt_path = os.path.join(DATA_DIR, 'TLT.csv')
+        if os.path.exists(tlt_path):
+            tlt_df = pd.read_csv(tlt_path)
+            tlt_df['Datetime'] = pd.to_datetime(tlt_df['Datetime'], errors='coerce')
+            tlt_df = tlt_df.dropna(subset=['Datetime']).sort_values('Datetime')
+            tlt_price = float(tlt_df['Close'].iloc[-1])
+            tlt_shares = tlt_seed / tlt_price
+            print(f"{'TLT (buffer)':<24} {'-':<10} ${tlt_price:>8.2f} {tlt_shares:>10.6f} ${tlt_seed:>6.2f} {'Bonds':<22}")
+            # Add TLT to portfolio CSV
+            portfolio = pd.concat([portfolio, pd.DataFrame([{
+                'rank': len(portfolio) + 1, 'ticker': 'TLT',
+                'score': float('nan'), 'price': tlt_price,
+                'sector': 'Bonds', 'target_usd': tlt_seed,
+                'shares': tlt_shares,
+            }])], ignore_index=True)
+            print(f"{'Grand total':<24} {'':<10} {'':<10} ${portfolio['target_usd'].sum():>7.2f}")
 
     if SECTOR_CAP and sectors:
         print(f"\n## Sector breakdown (Cap {int(SECTOR_CAP*100)}%, max {max(1, int(TOP_N*SECTOR_CAP))}/sector)")

@@ -175,25 +175,39 @@ Momentum/MA/Trend는 redundant. 진짜 핵심은 **lowvol + rsi + volsurge**.
 
 > **v4(6-feature) 대비 향상**: 모든 config가 Sharpe +0.05~0.16, alpha +1~2%p 개선. 3-feature가 압승.
 
-### 타입별 추천 (v5)
+### 운용 옵션 — 2축 구조 (v5.2)
 
-| 사용자 | 권장 | Sharpe | Alpha | MDD | t-stat |
+**축 1: PROFILE (model 비중, 위험도 결정)**
+
+| Profile | model 비중 | TLT buffer | Sharpe | Alpha | MDD |
 |---|---|---|---|---|---|
-| **안정 우선** (낮은 MDD) | Top-20 + Cap 15% | 1.82 | +31.7%p | **-19.7%** | 7.16 |
-| **균형 1위** ⭐ (Sharpe 공동 1위) | Top-15 + Cap 15% | **1.84** | +34.9%p | -19.9% | 6.61 |
-| **균형 2위** ⭐ | Top-20 + Cap 20% | **1.84** | +33.6%p | -20.1% | **7.03** |
-| **알파 + 안정** | Top-15 + Cap 25% | 1.81 | +37.7%p | -20.8% | 6.45 |
-| **공격 (최대 알파)** | Top-10 + Cap 30% | 1.78 | **+45.2%p** | -22.6% | 5.62 |
-| **단순 (현재 default)** | Top-20 No cap | 1.79 | +34.6%p | -20.9% | 6.75 |
+| **standard** ⭐ (default, 라이브) | 100% | 0% | 1.79 | **+34.6%p** | -20.9% |
+| **low_risk** | 60% | 40% | **1.91** | +16.4%p | **-12.7%** |
 
-**선택 가이드** (시드 무관, 결정 기준 = **Alpha** + Sharpe + t-stat):
-- 운용 단순성 = **Top-20 No cap** (현재 라이브) ⭐
-- Sharpe 1위 + 알파 평균 = **Top-15 Cap15%** 또는 **Top-20 Cap20%** (사실상 동일)
-- 알파 압도 + Sharpe 양호 = **Top-10 Cap30%** (변동 ↑)
+→ `current_portfolio.py`의 `PROFILE` 변수 한 줄로 전환. 알파 추구냐 안정 추구냐만 결정.
 
-> **Note**: TLT/GLD buffer는 알파를 큰 폭 희생하므로 **장기 자산 증식 목적**엔 부적합. MDD 견디기 어려운 별도 성향 사용자용 옵션. (밑 ETF buffer 섹션 참조)
+**축 2: TOP_N + SECTOR_CAP (같은 model 내 변형, 선택사항)**
 
-→ `current_portfolio.py`에서 `TOP_N`, `SECTOR_CAP` 변수로 전환 가능.
+검증된 매트릭스에서 자유 선택. 같은 PROFILE 내에서 운용 변형 가능:
+
+| 운용 변형 | Sharpe | Alpha | MDD | 메모 |
+|---|---|---|---|---|
+| **Top-20 No cap** ⭐ (default) | 1.79 | +34.6%p | -20.9% | 가장 단순, 라이브 |
+| Top-15 Cap 20% | 1.84 | +37.7%p | -20.8% | Sharpe peak |
+| Top-10 Cap 30% | 1.78 | +45.2%p | -22.6% | 최대 알파 |
+| Top-20 Cap 15% | 1.82 | +31.7%p | -19.7% | 낮은 MDD |
+| Top-15 Cap 15% | 1.84 | +34.9%p | -19.9% | Sharpe + MDD 양호 |
+
+→ `current_portfolio.py`의 `TOP_N`, `SECTOR_CAP` 변수로 자유 변경.
+
+**Fix 시점 (현재 default 변경 검토)**:
+- 라이브 6개월 후 (실제 데이터 모이면)
+- 매년 매트릭스 재검증 (universe/regime 변화 가능)
+
+**선택 가이드 (시드 무관, 결정 기준 = Alpha > Sharpe > t-stat > MDD)**:
+- 알파 우선 = **Standard + Top-20 No cap** (현재 라이브)
+- 알파 + Sharpe 균형 = Standard + Top-15 Cap20%
+- 안정 우선 = **Low-Risk** (단, alpha 절반 희생 — 장기 부 증식엔 부적합)
 
 ## 폴더 구조
 
