@@ -4,6 +4,72 @@
 
 ---
 
+## v0.8.0 (2026-05-06) — 27 features × LightGBM × Sharadar × 한투 cost
+
+**Base**: 27 features (price 10 + cross 2 + sector 3 + fundamental 10 + macro 2)
+        × LightGBM (depth=4, n_est=200, lr=0.1)
+        × Sharadar historical S&P 500 universe
+        × 한국투자증권 평시 cost 0.25% per side
+        × Weekly rebal (5d) + 10y train + yearly retrain
+        × NaN fillna(median) + multi-horizon rank target
+        × 60일 PIT lag
+
+검증 결과 (1998-01-01 ~ 2026-05-04, 28년 walk-forward):
+- α gross vs SPY:    **+11.83%p**
+- α net   vs SPY:    **+5.44%p**  (cost 0.25% 적용)
+- Sharpe:            0.56
+- MDD:               -59.6%
+- Rank IC:           +0.0166
+- Annual turnover:   21.7x
+
+**vs v0.7.2 baseline (4 features, +3.98%p)**: net α +1.46%p 개선 (cost 5배 환경에서).
+
+**Feature importance top 5**:
+1. yield_curve  20.3%   (macro regime)
+2. vix_level     7.1%   (volatility regime)
+3. beta_to_spy   6.8%   (market sensitivity)
+4. roe_ttm       5.0%   (quality)
+5. pb            5.0%   (value)
+
+→ 모델 alpha source = "macro regime detection + regime-specific stock picking" (비선형 interaction, Tree만 잡음).
+
+**검증된 약점 (다음 단계 후보)**:
+- 2023-2024 AI rally 못 따라감 (-46%p 누적)
+- Bull regime에서 약함, Bear/Recovery에서 강함 (contrarian/defensive)
+
+**개발 단계 매핑**:
+- Phase X: 29 features 빌드 (data prep)
+- Phase Y v1 (실패): B1 fast retrain + daily rebal + NaN drop → -6.7%p
+- Phase Y v3 (성공): Gemini fix 적용 → 24 cells bake-off → LGBM winner
+- LGBM Sweep: 32 cells HP refinement → d=4 n=200 lr=0.1 재확인
+
+**파일**:
+- 코드:  `phase_y_pure_ml_v2.py`, `phase_y_lgbm_sweep.py`, `analyze_phase_y.py`
+- 결과:  `results/phase_y_v3_results.json`, `results/lgbm_sweep_results.json`,
+        `results/phase_y_lgbm_yearly.csv`, `results/phase_y_lgbm_importance.csv`,
+        `results/phase_y_feature_corr.csv`
+- Features:  `data/panels/features/*.parquet` (29개)
+- Universe:  `data/sharadar/SP500.parquet` (historical members)
+
+---
+
+## v0.7.2 (2026-05-05) — Sharadar baseline (survivorship-corrected)
+
+4 features (lowvol + rsi + volsurge + momentum_12_1) × Ridge α=1.0
+× Sharadar historical S&P 500 (delisted 포함)
+× cost 0.05% × daily rebal × 10y train × yearly retrain.
+
+검증 결과: α +3.98%p, Sharpe 0.60, t=1.76 (n.s.).
+
+**v0.7.1 +45.29%p의 진짜 정체 발견**:
+- Survivorship bias 차감: -27.90%p
+- Code 차이 (gauss-rank vs z-score): -16.37%p
+- Data source: -2.26%p (yfinance vs Sharadar 차이 미세)
+
+→ v0.7.1 +45%p의 86%가 부풀림. v0.7.2 +3.98%p가 진짜 baseline.
+
+---
+
 ## v5 (2026-04-28 ~ 진행 중)
 
 **Base**: 3-feature minimum (lowvol + rsi + volsurge) + Ridge α=1.0 + 7y train + Weekly + S&P 500 universe.
@@ -21,8 +87,6 @@
   - t-stat 6.75 → 6.52 (여전히 매우 강함)
 - **다른 테스트 영향**: 모든 config 동등하게 ~1.7%p 하향. 상대 비교 (Top-N×Cap, Hysteresis 등) 유효성 보존.
 - 이전 보고된 모든 alpha 수치는 leakage 부풀림 포함 → README 정정
-
-### v5.3 (2026-04-29 오후 늦게) — Hysteresis 채택 + 곡선 확정
 
 ### v5.3 (2026-04-29 오후 늦게) — Hysteresis 채택 + 곡선 확정
 - **Hysteresis 검증** (1차 — exit_n ∈ {20, 25, 30, 40, 50}, 2차 — {45, 50, 55, 60, 65, 75}):

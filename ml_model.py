@@ -55,14 +55,23 @@ def stack_panel_to_long(panel_dict, target=None):
 def make_target(close, forward_days, target_type='rank'):
     """Compute forward target for each (date, ticker).
 
-    target_type='return': raw forward N-day return
-    target_type='rank':   cross-sectional rank of forward return (uniform [0,1])
+    target_type='return':             raw forward N-day return
+    target_type='rank':               cross-sectional rank of forward N-day return ([0,1])
+    target_type='multi_horizon_rank': mean of cross-sectional ranks at forward 5/10/20.
+                                      forward_days arg ignored. Caller must pass
+                                      forward_days=20 in hp for proper leakage buffer.
     """
+    if target_type == 'multi_horizon_rank':
+        ranks = []
+        for h in (5, 10, 20):
+            r = (close.shift(-h) / close - 1).rank(axis=1, pct=True)
+            ranks.append(r)
+        return sum(ranks) / len(ranks)
+
     forward_ret = close.shift(-forward_days) / close - 1
     if target_type == 'return':
         return forward_ret
     elif target_type == 'rank':
-        # Per-row rank, normalized to [0, 1]
         ranks = forward_ret.rank(axis=1, pct=True)
         return ranks
     else:

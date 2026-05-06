@@ -1,19 +1,23 @@
 """
-Current portfolio recommendation — v5.2 (3-feature minimum model + risk profiles).
+Current portfolio recommendation — v0.7.1 (Sharpe winner, locked).
 
-Run weekly to get Top-N stocks for the week.
+Run daily/weekly to get Top-N stocks.
 
-2 Profiles (model 비중):
-  - 'standard'   : 100% model         → 알파 추구, 현재 라이브
-  - 'low_risk'   : 60% model + 40% TLT → 안정 추구, MDD 절반
+v0.7.1 best Sharpe config (9,000 cells full grid 검증):
+  features:    +momentum (lowvol + rsi + volsurge + momentum_12_1)
+  train_years: 10
+  rebal:       1d (daily — backtest용; 운용은 weekly 가능)
+  TOP_N:       10
+  HYST_EXIT:   40
 
-같은 model 내 변형 (TOP_N + SECTOR_CAP) — 검증된 옵션:
-  - Top-20 No cap   (default, 단순)         Sharpe 1.79, alpha +34.6%p
-  - Top-15 Cap 20%  (Sharpe peak)            Sharpe 1.84, alpha +37.7%p
-  - Top-10 Cap 30%  (최대 알파)              Sharpe 1.78, alpha +45.2%p
-  - Top-20 Cap 15%  (낮은 MDD)               Sharpe 1.82, alpha +31.7%p, MDD -19.7%
+Backtest 성능:
+  α vs SPY:     +45.29%p
+  Sharpe:       1.52 (1위, 모든 9,000 cells 중)
+  t_NW7:        6.14 (통계적 유의)
 
-자세한 매트릭스 + 검증 결과 README 참조.
+vs v0.6.0 baseline (+37.41%p): +7.88%p 개선
+
+자세한 검증 결과: README 참조.
 """
 import core
 import ml_model
@@ -31,16 +35,15 @@ from sklearn.preprocessing import StandardScaler
 # [1] Profile — model 비중 (위험도)
 PROFILE      = 'standard'   # 'standard' (100% model) / 'low_risk' (60% model + 40% TLT)
 
-# [2] Parameters — 같은 model 내 변형 (개별 조정 가능)
-TOP_N        = 20           # 10 / 15 / 20 (검증된 매트릭스 README 참조)
+# [2] Parameters — v0.7.1 Sharpe winner (locked)
+TOP_N        = 10           # v0.7.1 winner
 SECTOR_CAP   = None         # None / 0.15 / 0.20 / 0.25 / 0.30
-HYST_EXIT    = 50           # exit_n: TOP_N=20 + exit_n=50 → 50등 밖되면 매도 (회전율 ↓ + alpha ↑)
-                            # 옵션: 20 (no hyst), 25, 30, 40, 50 (best)
+HYST_EXIT    = 40           # exit_n: TOP_N=10 + exit_n=40 → 40등 밖되면 매도
 
 # [3] Common
 SEED_USD     = 400          # your seed in USD
-TRAIN_YEARS  = 7            # 7 is sweet spot (validated)
-FEATURES     = 'minimum'    # 'minimum' (3-feat v5 best) or 'full' (6-feat v4 baseline)
+TRAIN_YEARS  = 10           # v0.7.1 winner
+FEATURES     = 'plus_momentum'  # v0.7.1 winner: lowvol + rsi + volsurge + momentum_12_1
 # =============================================================================
 
 PROFILES = {
@@ -51,9 +54,10 @@ PROFILES = {
 }
 
 FEATURE_SETS = {
-    'minimum': ['lowvol', 'rsi', 'volsurge'],          # v5 best (Sharpe 1.77)
-    'full':    ['momentum', 'lowvol', 'trend',          # v4 baseline
-                'rsi', 'ma', 'volsurge'],
+    'minimum':       ['lowvol', 'rsi', 'volsurge'],                       # v5 best (3 feat)
+    'plus_momentum': ['lowvol', 'rsi', 'volsurge', 'momentum'],           # v0.7.1 Sharpe winner (4 feat)
+    'full':          ['momentum', 'lowvol', 'trend',                       # v4 baseline (6 feat)
+                      'rsi', 'ma', 'volsurge'],
 }
 
 # Resolve profile
@@ -112,7 +116,7 @@ def main():
     cap_label = "No cap" if SECTOR_CAP is None else f"Cap {int(SECTOR_CAP*100)}%"
     feat_list = FEATURE_SETS[FEATURES]
     profile_desc = PROFILES[PROFILE]['desc']
-    print(f"[{datetime.now()}] ML Portfolio v5.2 — Ridge + 7y + Weekly")
+    print(f"[{datetime.now()}] ML Portfolio v0.7.1 — Ridge α=1.0 + 10y train + +momentum (Sharpe winner)")
     print(f"  Profile: {PROFILE} ({profile_desc})")
     print(f"  Seed: ${SEED_USD} | Top-{TOP_N} | {cap_label} | Features: {FEATURES} ({len(feat_list)})")
     if TLT_BUFFER > 0:

@@ -1,5 +1,20 @@
 # Data files (too large for git, regenerable)
-data/master_sp500/
+data/
+
+# Score panels (regenerable from code, ~150MB)
+results/v080_score_panels/
+results/partial/
+
+# Large result files (regenerable)
+*.parquet
+results/*.parquet
+results/*.db
+
+# Local archive (옛 실험, 로컬에서 reference용)
+archive/
+
+# Notes (local working files)
+notes/
 
 # Python
 __pycache__/
@@ -20,3 +35,10 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+.session_backup_*.jsonl
+
+# Secrets
+.env
+.env.*
+*.pem
+credentials.json

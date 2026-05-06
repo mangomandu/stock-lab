@@ -1,0 +1,105 @@
+{
+  "version": "v0.8.0",
+  "lock_date": "2026-05-06",
+  "description": "27 features × LightGBM winner. Sharadar historical S&P 500 universe, 한투 cost 0.25%, weekly rebal.",
+
+  "model": {
+    "type": "LightGBM",
+    "max_depth": 4,
+    "n_estimators": 200,
+    "learning_rate": 0.1,
+    "num_leaves": 16,
+    "min_child_samples": 20,
+    "random_state": 42
+  },
+
+  "features": [
+    "mom_1m", "mom_3m", "mom_6m", "mom_12m_skip1", "mom_accel",
+    "reversal_1w",
+    "lowvol", "idio_vol", "volsurge", "high_52w_distance",
+    "rsi", "beta_to_spy",
+    "sec_rel_mom_12m", "sec_rel_mom_3m", "sec_rel_lowvol",
+    "pe", "pb", "ps", "evebitda",
+    "roe_ttm", "roa_ttm", "netmargin", "de",
+    "rev_growth_yoy", "fcfps",
+    "vix_level", "yield_curve"
+  ],
+  "n_features": 27,
+  "excluded_features": ["eps_growth_yoy (95% NaN)", "roic (100% NaN)"],
+
+  "walk_forward": {
+    "start_date": "1998-01-01",
+    "end_date": "2026-05-04",
+    "train_years": 10,
+    "retrain_days": 252,
+    "target_horizons": [5, 10, 20],
+    "target_buffer_days": 20
+  },
+
+  "portfolio": {
+    "top_n": 10,
+    "hysteresis_exit": 40,
+    "rebal_days": 5,
+    "cost_oneway": 0.0025
+  },
+
+  "data_handling": {
+    "universe_source": "Sharadar SP500 (historical members)",
+    "fundamental_pit_lag_days": 60,
+    "fundamental_freshness_days": 90,
+    "nan_handling": "fillna(median per feature, computed on train data)",
+    "feature_normalization": "Cross-sectional z-score (Phase X) + StandardScaler (time-pooled, in fit)"
+  },
+
+  "performance": {
+    "period": "1998-01-01 to 2026-05-04 (28 years)",
+    "alpha_gross_vs_spy": 0.1183,
+    "alpha_net_vs_spy": 0.0544,
+    "sharpe": 0.5645,
+    "mdd": -0.5957,
+    "ic_mean": 0.0166,
+    "ic_ir": null,
+    "annual_turnover": 21.7,
+    "win_rate_gross": 0.621,
+    "win_rate_net": 0.483,
+    "n_retrains": 28
+  },
+
+  "feature_importance_top_5_pct": {
+    "yield_curve": 20.3,
+    "vix_level": 7.1,
+    "beta_to_spy": 6.8,
+    "roe_ttm": 5.0,
+    "pb": 5.0
+  },
+
+  "weakness": [
+    "Bull/AI rally underperformance: 2023 -33.6%p, 2024 -12.5%p",
+    "Win rate near 50% (fat-tail dominant)",
+    "Sharpe lower than v0.7.2 (0.56 vs 0.60) due to MDD"
+  ],
+
+  "next_candidates": [
+    "v0.8.1: Bull-catcher features (sector momentum, growth-quality blend)",
+    "v0.8.2: HYST mechanism alternatives (stop_loss/trailing/take_profit)",
+    "v0.8.3: Refresh meta-policy (regime-adaptive)",
+    "v0.9.x: Paper trading (Alpaca, 4-8w OOS)"
+  ],
+
+  "code_files": {
+    "training": "phase_y_pure_ml_v2.py",
+    "hp_sweep": "phase_y_lgbm_sweep.py",
+    "feature_build": "build_features_phaseX.py",
+    "fundamental_panel": "build_fundamental_pit.py",
+    "universe": "sharadar_universe.py",
+    "analysis": "analyze_phase_y.py"
+  },
+
+  "data_files": {
+    "features_dir": "data/panels/features/",
+    "fundamental_pit": "data/panels/fundamental_pit.parquet",
+    "sp500_close": "data/panels/sp500_close.parquet",
+    "sp500_volume": "data/panels/sp500_volume.parquet",
+    "sharadar_raw": "data/sharadar/{SF1,SEP,TICKERS,SP500,DAILY,ACTIONS}.parquet"
+  }
+}

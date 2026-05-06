@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import os
 
-MASTER_DIR = '/home/dlfnek/stock_lab/data/master_sp500'
+MASTER_DIR = '/home/ec2-user/stock_lab/data/master_sp500'
 TRADING_DAYS = 252
 
 # -----------------------------------------------------------------------------
